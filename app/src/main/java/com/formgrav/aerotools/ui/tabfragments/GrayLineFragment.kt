@@ -29,23 +29,23 @@ class GrayLineFragment : Fragment() {
 
         binding.numberPicker.minValue = 1
         binding.numberPicker.maxValue = 160
-        binding.numberPicker.value = 80
+        binding.numberPicker.value = 40
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             binding.resultTextView1.text = "value: $newVal"
             if (activity is RootActivity) {
-                (activity as RootActivity).receiveStartFromSettings(newVal)
+                (activity as RootActivity).receiveStartGrayFromSettings(newVal)
             }
         }
 
         binding.numberPicker2.minValue = 1
         binding.numberPicker2.maxValue = 160
-        binding.numberPicker2.value = 80
+        binding.numberPicker2.value = 20
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
             binding.resultTextView2.text = "value: $newVal"
             if (activity is RootActivity) {
-                (activity as RootActivity).receiveEndFromSettings(newVal)
+                (activity as RootActivity).receiveEndGrayFromSettings(newVal)
             }
         }
     }

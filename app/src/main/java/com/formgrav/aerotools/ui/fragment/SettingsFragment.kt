@@ -1,5 +1,6 @@
 package com.formgrav.aerotools.ui.fragment
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -55,6 +56,9 @@ class SettingsFragment : Fragment() {
             }
         }.attach()
 
+        val drawable = ButtonDrawable()
+        drawable.text = "SAVE"
+        binding.buttonSave.background = drawable
 
 
     }

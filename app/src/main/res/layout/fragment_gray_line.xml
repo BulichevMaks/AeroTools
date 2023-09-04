@@ -4,18 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ui.tabfragments.GrayLineFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
 
     <NumberPicker
         android:id="@+id/numberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,8 +27,9 @@
         android:id="@+id/resultTextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:text="value "
+        android:layout_marginEnd="8dp"
+        android:text="initial value"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/numberPicker"
         app:layout_constraintEnd_toStartOf="@+id/numberPicker"
         app:layout_constraintTop_toTopOf="@+id/numberPicker" />
@@ -42,8 +38,9 @@
         android:id="@+id/resultTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="value "
+        android:layout_marginStart="8dp"
+        android:text="line length"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/numberPicker2"
         app:layout_constraintStart_toEndOf="@+id/numberPicker2"
         app:layout_constraintTop_toTopOf="@+id/numberPicker2" />

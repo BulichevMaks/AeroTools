@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.formgrav.aerotools.R
 import com.formgrav.aerotools.databinding.FragmentRedLineBinding
 import com.formgrav.aerotools.databinding.FragmentYellowLineBinding
+import com.formgrav.aerotools.ui.activity.RootActivity
 
 class RedLineFragment : Fragment() {
     private lateinit var binding: FragmentRedLineBinding
@@ -23,6 +24,32 @@ class RedLineFragment : Fragment() {
     ): View? {
         binding = FragmentRedLineBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.numberPicker.minValue = 1
+        binding.numberPicker.maxValue = 160
+        binding.numberPicker.value = 120
+
+        binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            binding.resultTextView1.text = "value: $newVal"
+            if (activity is RootActivity) {
+                (activity as RootActivity).receiveStartRedFromSettings(newVal)
+            }
+        }
+
+        binding.numberPicker2.minValue = 1
+        binding.numberPicker2.maxValue = 160
+        binding.numberPicker2.value = 40
+
+        binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
+            binding.resultTextView2.text = "value: $newVal"
+            if (activity is RootActivity) {
+                (activity as RootActivity).receiveEndRedFromSettings(newVal)
+            }
+        }
     }
 
     companion object {

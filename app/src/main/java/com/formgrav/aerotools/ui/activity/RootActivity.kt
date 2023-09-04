@@ -26,25 +26,92 @@ class RootActivity: AppCompatActivity() {
 
     }
 
-    fun receiveStartFromSettings(start: Int) {
+    fun receiveStartGrayFromSettings(start: Int) {
         val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
 
         if (containerFragment is NavHostFragment) {
             val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
             val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
             if (airSpeedFragment is AirSpeedFragment) {
-                airSpeedFragment.receiveStartFromSettings(start)
+                airSpeedFragment.receiveStartGrayFromSettings(start)
             }
         }
     }
-    fun receiveEndFromSettings(end: Int) {
+    fun receiveEndGrayFromSettings(end: Int) {
         val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
 
         if (containerFragment is NavHostFragment) {
             val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
             val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
             if (airSpeedFragment is AirSpeedFragment) {
-                airSpeedFragment.receiveEndFromSettings(end)
+                airSpeedFragment.receiveEndGrayFromSettings(end)
+            }
+        }
+    }
+    fun receiveStartYellowFromSettings(start: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveStartYellowFromSettings(start)
+            }
+        }
+    }
+    fun receiveEndYellowFromSettings(end: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveEndYellowFromSettings(end)
+            }
+        }
+    }
+
+    fun receiveStartRedFromSettings(start: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveStartRedFromSettings(start)
+            }
+        }
+    }
+    fun receiveEndRedFromSettings(end: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveEndRedFromSettings(end)
+            }
+        }
+    }
+    fun receiveStartGreenFromSettings(start: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveStartGreenFromSettings(start)
+            }
+        }
+    }
+    fun receiveEndGreenFromSettings(end: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveEndGreenFromSettings(end)
             }
         }
     }
