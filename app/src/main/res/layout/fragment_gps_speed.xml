@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".ui.activity.RootActivity"
+    >
+
+
+    <com.formgrav.aerotools.ui.customview.GpsSpeedView
+        android:id="@+id/speedView"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
+
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/airspeed"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/speed_view_border"
+        android:gravity="center"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:text="000"
+        android:textColor="#FF5722"
+        android:textSize="44dp"
+        app:layout_constraintBottom_toBottomOf="@+id/speedView"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintStart_toStartOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="68dp"
+        android:text="20"
+        style="@style/Text"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView11"
+        style="@style/Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="28dp"
+        android:text="40"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="244dp"
+        android:layout_marginEnd="68dp"
+        android:text="60"
+        style="@style/Text"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="154dp"
+        android:text="80"
+        style="@style/Text"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView12"
+        style="@style/Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="148dp"
+        android:text="120"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="244dp"
+        android:text="100"
+        style="@style/Text"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="56dp"
+        android:text="140"
+        android:textSize="@dimen/speed"
+        android:textStyle="bold"
+        style="@style/Text"
+        app:layout_constraintStart_toStartOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/speed_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="116dp"
+        android:text="GROUNDSPEED"
+        style="@style/Text"
+        app:layout_constraintBottom_toBottomOf="@+id/speedView"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintStart_toStartOf="@+id/speedView" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="102dp"
+        android:text="km/h"
+        android:textSize="10sp"
+        style="@style/Text"
+        app:layout_constraintBottom_toBottomOf="@+id/speedView"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintStart_toStartOf="@+id/speedView" />
+
+
+    <ImageView
+        android:id="@+id/screw1"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/button_selector3"
+        android:src="@drawable/screw_2"
+        app:layout_constraintStart_toStartOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+    <ImageView
+        android:id="@+id/screw2"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/button_selector3"
+        android:src="@drawable/screw_2"
+        app:layout_constraintBottom_toBottomOf="@+id/speedView"
+        app:layout_constraintStart_toStartOf="@+id/speedView" />
+
+    <ImageView
+        android:id="@+id/screw"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/button_selector3"
+        android:src="@drawable/screw_2"
+        app:layout_constraintBottom_toBottomOf="@+id/speedView"
+        app:layout_constraintEnd_toEndOf="@+id/speedView" />
+
+    <ImageView
+        android:id="@+id/screw3"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/button_selector3"
+        android:src="@drawable/screw_2"
+        app:layout_constraintEnd_toEndOf="@+id/speedView"
+        app:layout_constraintTop_toTopOf="@+id/speedView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

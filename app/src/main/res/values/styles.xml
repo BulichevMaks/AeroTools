@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Button">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:background">@drawable/button_outline</item>
+    </style>
+</resources>
+<!--    android:background="@drawable/button_outline"-->

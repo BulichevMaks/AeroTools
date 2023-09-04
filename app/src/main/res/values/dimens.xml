@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="speed" translatable="false">28sp</dimen>
+    <dimen name="line_text_size" translatable="false">18sp</dimen>
+
+</resources>
