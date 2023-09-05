@@ -115,5 +115,16 @@ class RootActivity: AppCompatActivity() {
             }
         }
     }
+    fun saveSettings() {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.saveSettings()
+            }
+        }
+    }
 }
 
