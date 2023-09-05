@@ -82,11 +82,3 @@ class ButtonDrawable: Drawable() {
         invalidateSelf()
     }
 }
-//        // Отрисовка внешнего круга при нажатии
-//        if(isPressed) {
-//            outerCirclePaint.color = Color.TRANSPARENT
-//            canvas.drawCircle(centerX, centerY, radius, outerCirclePaint)
-//        } else {
-//            outerCirclePaint.color = Color.GRAY
-//            canvas.drawCircle(centerX, centerY, radius, outerCirclePaint)
-//        }
