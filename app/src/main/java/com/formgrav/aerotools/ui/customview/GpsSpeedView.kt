@@ -241,6 +241,11 @@ class GpsSpeedView : View {
         canvas?.drawLine(0.0f, 0f, 0F,0.89f, paint)
         paint.strokeWidth = 0.075f
         canvas?.drawLine(0.0f, 0f, 0F,0.88f, paint)
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 0.01f
+        canvas?.drawLine(-0.04f, 0.88f, 0F,0.97f, paint)
+        canvas?.drawLine(0.04f, 0.88f, 0F,0.97f, paint)
 
 
         canvas?.restore()

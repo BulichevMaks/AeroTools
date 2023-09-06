@@ -15,4 +15,5 @@
     <color name="blue">#6200EE</color>
     <color name="vp_blue">#3772E7</color>
     <color name="button_pressed_color">#FF5722</color>
+    <color name="your_surface_color">#F44336</color>
 </resources>

@@ -48,7 +48,6 @@ class VarioView2: View {
         val width: Int
         val height: Int
 
-        // Рассчитываем размеры View в зависимости от режимов измерения
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize
         } else if (widthMode == MeasureSpec.AT_MOST) {
@@ -64,7 +63,7 @@ class VarioView2: View {
         } else {
             height = desiredHeight
         }
-        // Устанавливаем рассчитанные размеры
+
         setMeasuredDimension(width, height)
     }
 
@@ -84,8 +83,7 @@ class VarioView2: View {
         canvas?.scale(.5f * width, -1f * height)
         canvas?.translate(1f, -1f)
         paint.style = Paint.Style.FILL
-//        paint.color = Color.argb(255, 48, 47, 47)
-//        canvas?.drawCircle(0F, 0F, 1F, paint)
+
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 0.38f // толщина дуги
         paint.color = Color.argb(255, 18, 17, 17)
@@ -168,6 +166,7 @@ class VarioView2: View {
         canvas?.save()
         canvas?.rotate(90 - 180f * (value / max.toFloat()))
 
+        //стрелка
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 0.015f
@@ -184,11 +183,15 @@ class VarioView2: View {
         canvas?.drawLine(0f, 0f, 0F,0.91f, paint)
         paint.strokeWidth = 0.06f
         canvas?.drawLine(0.0f, 0f, 0F,0.90f, paint)
+        paint.color = Color.BLACK
+        paint.strokeWidth = 0.01f
+        canvas?.drawLine(-0.04f, 0.88f, 0F,0.97f, paint)
+        canvas?.drawLine(0.04f, 0.88f, 0F,0.97f, paint)
+        paint.strokeWidth = 0.02f
+        canvas?.drawLine(-0.05f, 0f, -0.034f,0.89f, paint)
+        canvas?.drawLine(0.05f, 0f, 0.034F,0.89f, paint)
 
 
-//        paint.color = Color.BLACK
-//        paint.style = Paint.Style.FILL
-//        canvas?.drawCircle(0F, 0F, .34F, paint)
         canvas?.restore()
 
         canvas?.restore()

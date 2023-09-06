@@ -24,7 +24,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="186dp"
+        android:layout_height="196dp"
         android:layout_marginTop="46dp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="140dp" />
+            android:layout_height="150dp" />
 
 
     </LinearLayout>
@@ -48,7 +48,7 @@
         android:id="@+id/button_save"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="216dp"
         android:text="save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

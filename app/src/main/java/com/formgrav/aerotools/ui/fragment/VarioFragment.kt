@@ -2,22 +2,30 @@ package com.formgrav.aerotools.ui.fragment
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+
 import com.formgrav.aerotools.R
 import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
 import com.formgrav.aerotools.databinding.FragmentVarioBinding
 import com.formgrav.aerotools.ui.customview.ButtonDrawable
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,6 +36,7 @@ import org.koin.android.ext.android.getKoin
 class VarioFragment : Fragment() {
     private lateinit var binding: FragmentVarioBinding
     private lateinit var arduinoRepositoryImpl: ArduinoClientImpl
+   // private lateinit var contextProvider: ContextProvider
     private var alt = "0"
     private var currentPressure = ""
 
@@ -47,6 +56,8 @@ class VarioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arduinoRepositoryImpl = getKoin().get<ArduinoClientImpl>()
+       // contextProvider = requireActivity() as ContextProvider
+       // arduinoRepositoryImpl = ArduinoClientImpl(contextProvider.getDialogContext(), Handler(Looper.getMainLooper()), contextProvider.getArduinoContext() )
 
         val toneGen = ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME)
 
@@ -74,8 +85,6 @@ class VarioFragment : Fragment() {
             if (arduinoRepositoryImpl.isSerialConnectionOpen()) {
                 arduinoRepositoryImpl.setNewPressure("pre")
 
-               // binding.editPressureView.visibility = View.GONE
-               // binding.currentPressure.visibility = View.GONE
                 binding.progressBar.visibility = View.VISIBLE
 
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -86,8 +95,6 @@ class VarioFragment : Fragment() {
                         withContext(Dispatchers.Main) {
                             binding.progressBar.progress = progress
                             if (progress >= 100) {
-                              //  binding.editPressureView.visibility = View.VISIBLE
-                              //  binding.currentPressure.visibility = View.VISIBLE
                                 binding.progressBar.visibility = View.GONE
                                 binding.currentPressure.text =
                                     "CP-$currentPressure"
@@ -97,6 +104,14 @@ class VarioFragment : Fragment() {
                     buttonDrawable.setPressed(false)
                     arduinoRepositoryImpl.setNewPressure("set$currentPressure")
                 }
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Sensors are not connected")
+                    .setNeutralButton("ОК"
+                    ) { dialog, which ->
+
+                    }
+                    .show()
             }
         }
         val buttonDrawable1 = ButtonDrawable()
@@ -107,12 +122,21 @@ class VarioFragment : Fragment() {
             val newPressure = binding.editPressureView.text.toString()
             if (newPressure != "") {
                 if (arduinoRepositoryImpl.isSerialConnectionOpen()) {
+
+
                     arduinoRepositoryImpl.setNewPressure("set$newPressure")
                 }
-                // binding.defaultPressure.text = "Default pressure $newPressure hpa"
                 binding.currentPressure.text =
                     "CP-$newPressure"
                 binding.editPressureView.setText("")
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Sensors are not connected")
+                    .setNeutralButton("ОК"
+                    ) { dialog, which ->
+
+                    }
+                    .show()
             }
         }
 
@@ -138,48 +162,36 @@ class VarioFragment : Fragment() {
                     } else {
                         verticalSpeed = ((altitudeChange / deltaTime) - 0.1).toInt().toDouble() / 10
                     }
-//                    Log.d("MY_LOG1", "altitudeChange: $altitudeChangePerSecond")
-//                    Log.d("MY_LOG1", "verticalSpeed: $verticalSpeed")
-//                    Log.d("MY_LOG1", "_________________________________________--")
+
                     withContext(Dispatchers.Main) {
 
                         when (altitudeChangePerSecond) {
                             in -2..2 -> {
-
                                 binding.verticalSpeedView.text = "0"
                                 binding.verticalSpeedView.setTextColor(Color.WHITE)
                                 binding.arrowView.setArrowRotationAnimated(0)
-
                             }
-
                             in 3..99 -> {
-
-                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond )
+                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond)
                                 toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 500)
                                 binding.verticalSpeedView.setTextColor(Color.GREEN)
                                 binding.verticalSpeedView.text = "$verticalSpeed"
-
                             }
-
                             in 100..200 -> {
-                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond )
+                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond)
                                 binding.verticalSpeedView.setTextColor(Color.GREEN)
                                 binding.verticalSpeedView.text = "$verticalSpeed"
                             }
-
                             in -3 downTo -99 -> {
-                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond )
+                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond)
                                 binding.verticalSpeedView.setTextColor(Color.GRAY)
                                 binding.verticalSpeedView.text = "$verticalSpeed"
                             }
-
                             in -100 downTo -200 -> {
-
-                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond )
+                                binding.arrowView.setArrowRotationAnimated(altitudeChangePerSecond)
                                 binding.verticalSpeedView.setTextColor(Color.GRAY)
                                 binding.verticalSpeedView.text = "$verticalSpeed"
                             }
-
                             else -> {}
                         }
                         lifecycleScope.launch(Dispatchers.IO) {
@@ -190,7 +202,6 @@ class VarioFragment : Fragment() {
                                         altitudeChangePerSecond
                                     )
                                 }
-
                                 in 10..19 -> {
                                     for (i in 1..5) {
                                         toneGen.startTone(
@@ -200,7 +211,6 @@ class VarioFragment : Fragment() {
                                         delay(250)
                                     }
                                 }
-
                                 in 20..29 -> {
                                     for (i in 1..20) {
                                         toneGen.startTone(
@@ -210,7 +220,6 @@ class VarioFragment : Fragment() {
                                         delay(50)
                                     }
                                 }
-
                                 in 30..99 -> {
                                     for (i in 1..40) {
                                         toneGen.startTone(
@@ -220,7 +229,6 @@ class VarioFragment : Fragment() {
                                         delay(25)
                                     }
                                 }
-
                                 in -5 downTo -99 -> {
                                     toneGen.startTone(ToneGenerator.TONE_CDMA_CALLDROP_LITE, 2000)
                                 }
@@ -234,10 +242,34 @@ class VarioFragment : Fragment() {
                 }
             }
         }
+
+        // Ограничение максимальной длины всего ввода
+        val maxLength = 7
+        binding.editPressureView.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
+        // Ограничение максимального числа знаков после запятой
+        val decimalDigits = 2
+        binding.editPressureView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val text = s.toString()
+                val decimalSeparator = ","
+
+                if (text.contains(decimalSeparator)) {
+                    val indexOfSeparator = text.indexOf(decimalSeparator)
+                    if (text.length - indexOfSeparator - 1 > decimalDigits) {
+                        s?.delete(indexOfSeparator + decimalDigits + 1, text.length)
+                    }
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     companion object {
-
         fun newInstance() = VarioFragment()
     }
 }

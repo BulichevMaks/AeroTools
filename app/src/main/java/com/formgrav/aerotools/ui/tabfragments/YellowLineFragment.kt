@@ -48,10 +48,8 @@ class YellowLineFragment: Fragment() {
 
         binding.numberPicker.minValue = 1
         binding.numberPicker.maxValue = 160
-       // binding.numberPicker.value = 100
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView1.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveStartYellowFromSettings(newVal)
             }
@@ -59,10 +57,8 @@ class YellowLineFragment: Fragment() {
 
         binding.numberPicker2.minValue = 1
         binding.numberPicker2.maxValue = 160
-       // binding.numberPicker2.value = 20
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView2.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveEndYellowFromSettings(newVal)
             }

@@ -18,4 +18,5 @@
     <color name="green">#3D8A13</color>
     <color name="yellow">#FFEB3B</color>
     <color name="red">#F44336</color>
+    <color name="your_surface_color">#F44336</color>
 </resources>
