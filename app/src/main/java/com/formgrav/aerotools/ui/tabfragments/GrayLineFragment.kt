@@ -47,10 +47,8 @@ class GrayLineFragment : Fragment() {
 
         binding.numberPicker.minValue = 1
         binding.numberPicker.maxValue = 160
-       // binding.numberPicker.value = settings.startGrayAngle!!
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView1.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveStartGrayFromSettings(newVal)
             }
@@ -58,10 +56,8 @@ class GrayLineFragment : Fragment() {
 
         binding.numberPicker2.minValue = 1
         binding.numberPicker2.maxValue = 160
-       // binding.numberPicker2.value = settings.sweepGrayAngle!!
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView2.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveEndGrayFromSettings(newVal)
             }

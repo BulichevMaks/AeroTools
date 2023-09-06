@@ -3,6 +3,7 @@
     <style name="Base.Theme.Altimeter" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
          <item name="colorPrimary">@color/gray</item>
+
     </style>
     <style name="Theme.Altimeter" parent="Base.Theme.Altimeter" />
 

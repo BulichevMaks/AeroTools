@@ -1,8 +1,10 @@
 package com.formgrav.aerotools.ui.activity
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
+
 import com.formgrav.aerotools.R
 import com.formgrav.aerotools.databinding.ActivityRootBinding
 import com.formgrav.aerotools.ui.fragment.AirSpeedFragment
@@ -126,5 +128,8 @@ class RootActivity: AppCompatActivity() {
             }
         }
     }
+
+
+
 }
 

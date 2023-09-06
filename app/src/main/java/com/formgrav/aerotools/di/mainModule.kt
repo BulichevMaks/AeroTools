@@ -1,5 +1,7 @@
 package com.formgrav.aerotools.di
 
+import android.os.Handler
+import android.os.Looper
 import androidx.room.Room
 import com.formgrav.aerotools.data.converters.SettingsDbConvertor
 import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
@@ -17,6 +19,8 @@ import com.formgrav.aerotools.ui.viewmodel.GreenLineViewModel
 import com.formgrav.aerotools.ui.viewmodel.RedLineViewModel
 import com.formgrav.aerotools.ui.viewmodel.SpeedViewModel
 import com.formgrav.aerotools.ui.viewmodel.YellowLineViewModel
+import org.koin.android.ext.koin.androidApplication
+
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -44,8 +48,15 @@ val mainModule = module {
     }
 
     single {
-        ArduinoClientImpl(androidContext())
+        Handler(Looper.getMainLooper())
     }
+
+
+    single {
+        ArduinoClientImpl( get(), androidContext())
+    }
+
+
 
     single<ArduinoRepository> {
         ArduinoRepositoryImpl(get())

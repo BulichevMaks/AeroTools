@@ -48,10 +48,8 @@ class RedLineFragment : Fragment() {
 
         binding.numberPicker.minValue = 1
         binding.numberPicker.maxValue = 160
-      //  binding.numberPicker.value = 120
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView1.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveStartRedFromSettings(newVal)
             }
@@ -59,10 +57,8 @@ class RedLineFragment : Fragment() {
 
         binding.numberPicker2.minValue = 1
         binding.numberPicker2.maxValue = 160
-      //  binding.numberPicker2.value = 40
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
-            binding.resultTextView2.text = "value: $newVal"
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveEndRedFromSettings(newVal)
             }

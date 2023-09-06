@@ -8,25 +8,33 @@ import android.content.IntentFilter
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbManager
+import android.os.Handler
 
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.formgrav.aerotools.R
 
 import com.formgrav.aerotools.data.model.AttitudeDataSourse
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import com.hoho.android.usbserial.driver.UsbSerialPort
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import java.io.IOException
 import java.nio.charset.Charset
+
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 
-class ArduinoClientImpl(private val context: Context) {
+class ArduinoClientImpl(private val mainHandler: Handler, private val context: Context) {
 
     private var usbManager: UsbManager =
         context.applicationContext.getSystemService(Context.USB_SERVICE) as UsbManager
@@ -36,9 +44,8 @@ class ArduinoClientImpl(private val context: Context) {
     private var isSerialConnectionOpen = false
     private var receiveBuffer = StringBuilder()
 
-    //  var attitudeData = AttitudeDataSourse(data = "жопа")
     private val scope = CoroutineScope(Dispatchers.IO + CoroutineExceptionHandler { _, exception ->
-        // Log.e("MY_LOG", "Coroutine error: $exception")
+        Log.e("MY_LOG", "Coroutine error: $exception")
     })
     private val _counLiveData = MutableLiveData<AttitudeDataSourse>()
     val counLiveData: LiveData<AttitudeDataSourse> = _counLiveData
@@ -56,28 +63,58 @@ class ArduinoClientImpl(private val context: Context) {
 
                         if (receiveBuffer.contains(">")) { // Проверяем наличие разделителя
                             val endIndex = receiveBuffer.indexOf(">")
-                            val fullData = receiveBuffer.substring(0, endIndex) // Получаем полные данные до разделителя
+                            val fullData = receiveBuffer.substring(
+                                0,
+                                endIndex
+                            ) // Получаем полные данные до разделителя
                             Log.d("MY_LOG", "Received data: $fullData")
-                            receiveBuffer.delete(0, endIndex + 1) // Удаляем полные данные и разделитель из буфера
+                            receiveBuffer.delete(
+                                0,
+                                endIndex + 1
+                            ) // Удаляем полные данные и разделитель из буфера
                             //  Log.d("MY_LOG", "Received data: $fullData")
                             scope.launch {
-                                _counLiveData.postValue(AttitudeDataSourse(altitude = "", pressure = fullData))
+                                _counLiveData.postValue(
+                                    AttitudeDataSourse(
+                                        altitude = "",
+                                        pressure = fullData
+                                    )
+                                )
                             }
                         }
 
                         if (receiveBuffer.contains("_")) { // Проверяем наличие разделителя
                             val endIndex = receiveBuffer.indexOf("_")
-                            val fullData = receiveBuffer.substring(0, endIndex) // Получаем полные данные до разделителя
-                            receiveBuffer.delete(0, endIndex + 1) // Удаляем полные данные и разделитель из буфера
-                          //  Log.d("MY_LOG", "Received data: $fullData")
+                            val fullData = receiveBuffer.substring(
+                                0,
+                                endIndex
+                            ) // Получаем полные данные до разделителя
+                            receiveBuffer.delete(
+                                0,
+                                endIndex + 1
+                            ) // Удаляем полные данные и разделитель из буфера
+                            //  Log.d("MY_LOG", "Received data: $fullData")
                             scope.launch {
-                                _counLiveData.postValue(AttitudeDataSourse(altitude = fullData, pressure = ""))
+                                _counLiveData.postValue(
+                                    AttitudeDataSourse(
+                                        altitude = fullData,
+                                        pressure = ""
+                                    )
+                                )
                             }
                         }
                     }
                 } catch (e: IOException) {
+                    Log.d("MY_LOG", "The device is disabled")
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage("PORT NOT OPEN")
+                        .setNeutralButton(
+                            "ОК"
+                        ) { dialog, which ->
+
+                        }.show()
                     e.printStackTrace()
-                    return
+                    // return
                 }
             }
         }
@@ -93,11 +130,17 @@ class ArduinoClientImpl(private val context: Context) {
                     if (connection == null) {
 
                         //          Log.d("MY_LOG", "устройство не удалось открыть")
+                        mainHandler.post {
+                            Toast.makeText(context, "устройство не удалось открыть", Toast.LENGTH_LONG).show()
+                        }
+
 
                     } else {
-                        // Ваш код, если удалось открыть устройство
 
                         //     Log.d("MY_LOG", "удалось открыть устройство")
+//                        mainHandler.post {
+//                            Toast.makeText(context, "удалось открыть устройство", Toast.LENGTH_LONG).show()
+//                        }
 
                     }
                     val driver = UsbSerialProber.getDefaultProber().probeDevice(device)
@@ -117,19 +160,32 @@ class ArduinoClientImpl(private val context: Context) {
                             }
                         } catch (e: Exception) {
                             //           Log.d("MY_LOG", "PORT NOT OPEN")
+                            mainHandler.post {
+                                Toast.makeText(context, "PORT NOT OPEN", Toast.LENGTH_LONG).show()
+                            }
                         }
                     } else {
                         //       Log.d("MY_LOG", "Driver not found")
+                        mainHandler.post {
+                            Toast.makeText(context, "Driver not found", Toast.LENGTH_LONG).show()
+                        }
                     }
                 } else {
                     //      Log.d("MY_LOG", "PERM NOT GRANTED")
+                    mainHandler.post {
+                        Toast.makeText(context, "PERM NOT GRANTED", Toast.LENGTH_LONG).show()
+                    }
                 }
             } else if (intent.action == UsbManager.ACTION_USB_DEVICE_ATTACHED) {
-                //   Log.d("MY_LOG", "onClickStart2")
+
                 onClickStart()
             } else if (intent.action == UsbManager.ACTION_USB_DEVICE_DETACHED) {
                 // Действия при отключении USB-устройства
                 closeConnection()
+                Log.d("MY_LOG", "The device is disabled")
+                mainHandler.post {
+                    Toast.makeText(context, "The device is disabled", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
