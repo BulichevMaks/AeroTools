@@ -1,6 +1,5 @@
 package com.formgrav.aerotools.ui.activity
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
@@ -8,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.formgrav.aerotools.R
 import com.formgrav.aerotools.databinding.ActivityRootBinding
 import com.formgrav.aerotools.ui.fragment.AirSpeedFragment
+import com.formgrav.aerotools.ui.rootfragments.DownRootFragment
 
 
 class RootActivity: AppCompatActivity() {
@@ -27,7 +27,15 @@ class RootActivity: AppCompatActivity() {
         val navController2 = navHostFragment2.navController
 
     }
+    fun findDownRootFragment(): DownRootFragment? {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView2)
 
+        if (containerFragment is NavHostFragment) {
+            return containerFragment.childFragmentManager.fragments.firstOrNull { it is DownRootFragment } as? DownRootFragment
+        }
+
+        return null
+    }
     fun receiveStartGrayFromSettings(start: Int) {
         val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
 

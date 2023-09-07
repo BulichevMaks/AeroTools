@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
 import com.formgrav.aerotools.databinding.FragmentDownRootBinding
 import com.formgrav.aerotools.ui.adapters.DownViewPagerAdapter
 import com.formgrav.aerotools.ui.adapters.UpViewPagerAdapter
 
 class DownRootFragment : Fragment() {
     private lateinit var binding: FragmentDownRootBinding
+    lateinit var viewPager: ViewPager2
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDownRootBinding.inflate(inflater, container, false)
@@ -20,10 +23,32 @@ class DownRootFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewPager.adapter = DownViewPagerAdapter(
+
+
+        val adapter = DownViewPagerAdapter(
             fragmentManager = childFragmentManager,
-            lifecycle = lifecycle,
+            lifecycle = lifecycle
         )
-        binding.viewPager.setCurrentItem(1, false)
+        viewPager = binding.downViewPager
+        viewPager.adapter = adapter
+        viewPager.setCurrentItem(1, false)
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 3) {
+                    // Запретить перелистывание на фрагмент MapFragment
+                    viewPager.isUserInputEnabled = false
+                } else {
+                    // Разрешить перелистывание на другие фрагменты
+                    viewPager.isUserInputEnabled = true
+                }
+            }
+        })
+
     }
+    companion object {
+
+    }
+
 }

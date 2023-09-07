@@ -132,15 +132,16 @@
     <EditText
         android:id="@+id/edit_pressure_view"
         style="@style/Text"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
+        android:layout_marginStart="133dp"
         android:layout_marginTop="212dp"
         android:background="@drawable/edittext_border"
         android:gravity="center"
         android:hint="input"
         android:inputType="numberDecimal"
-        android:textSize="18sp"
+        android:textColorHint="#6A646464"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/arrowView"
         app:layout_constraintTop_toTopOf="@+id/arrowView" />
 
