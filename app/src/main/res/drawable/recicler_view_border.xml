@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@android:color/black" /> <!-- Фон внутри рамки -->
+    <solid android:color="#AB4C4B4B" /> <!-- Фон внутри рамки -->
     <stroke
-        android:width="0.7dp"
-        android:color="#C3646464"
-        android:dashWidth="2dp"
-        android:dashGap="2dp"/>
+        android:width="2dp"
+        android:color="#F6F5F5"
+        />
     <padding
         android:bottom="5dp"
         android:left="2dp"
