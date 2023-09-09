@@ -18,6 +18,7 @@ import com.formgrav.aerotools.databinding.FragmentGpsSpeedBinding
 import com.formgrav.aerotools.databinding.FragmentSpeedBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,6 +59,11 @@ class GpsSpeedFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        gpsJob?.cancel()
     }
 
     // Метод для инициализации LocationManager
