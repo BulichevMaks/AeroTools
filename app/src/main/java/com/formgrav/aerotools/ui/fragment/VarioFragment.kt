@@ -36,7 +36,6 @@ import org.koin.android.ext.android.getKoin
 class VarioFragment : Fragment() {
     private lateinit var binding: FragmentVarioBinding
     private lateinit var arduinoRepositoryImpl: ArduinoClientImpl
-   // private lateinit var contextProvider: ContextProvider
     private var alt = "0"
     private var currentPressure = ""
 
@@ -56,8 +55,6 @@ class VarioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arduinoRepositoryImpl = getKoin().get<ArduinoClientImpl>()
-       // contextProvider = requireActivity() as ContextProvider
-       // arduinoRepositoryImpl = ArduinoClientImpl(contextProvider.getDialogContext(), Handler(Looper.getMainLooper()), contextProvider.getArduinoContext() )
 
         val toneGen = ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME)
 

@@ -5,15 +5,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import kotlin.math.abs
 import kotlin.math.min
 
-
-class VarioView : View {
+class VarioViewDown : View {
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var value: Float = 0f
         set(newValue) {
@@ -73,30 +71,32 @@ class VarioView : View {
         super.onDraw(canvas)
         canvas?.save()
 
-        canvas?.scale(1f * width, -1f * height)
-        canvas?.translate(1f, -1f)
-        paint.style = Paint.Style.FILL
-        paint.color = Color.GREEN
+
+        canvas?.scale(1f * width, 1f * height)
+        canvas?.translate(1f, 0f)
+        canvas.rotate(180f)
+        paint.color = Color.GRAY
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 0.8f
-        canvas?.drawLine(-0.04f, 0f, -0.04F,value * 0.2f, paint)
+        canvas?.drawLine(0f, 0f, 0F,value * 0.2f, paint)
 
         canvas?.save()
 
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 0.1f
-        canvas?.drawLine(0f, 0f, 0F,1f, paint)
 
         paint.strokeWidth = 0.01f
-        canvas?.drawLine(-0.5f, 0.2f, 0F,0.2f, paint)
+        canvas?.drawLine(0f, 0f, 0.5F,0f, paint)
         paint.strokeWidth = 0.01f
-        canvas?.drawLine(-0.5f, 0.4f, 0F,0.4f, paint)
+        canvas?.drawLine(0f, -0.2f, 0.5F,-0.2f, paint)
         paint.strokeWidth = 0.01f
-        canvas?.drawLine(-0.5f, 0.6f, 0F,0.6f, paint)
+        canvas?.drawLine(0f, -0.4f, 0.5F,-0.4f, paint)
         paint.strokeWidth = 0.01f
-        canvas?.drawLine(-0.5f, 0.8f, 0F,0.8f, paint)
-        canvas?.drawLine(-0.5f, 1f, 0F,1f, paint)
+        canvas?.drawLine(0f, -0.6f, 0.5F,-0.6f, paint)
+        paint.strokeWidth = 0.01f
+        canvas?.drawLine(0f, -0.8f, 0.5F,-0.8f, paint)
+        paint.strokeWidth = 0.01f
+        canvas?.drawLine(0f, -1f, 0.5F,-1f, paint)
 
 
 
@@ -105,7 +105,7 @@ class VarioView : View {
         canvas?.restore()
     }
 
-    fun setUpAnimated(boost: Float) {
+    fun setDownAnimated(boost: Float) {
         ValueAnimator.ofFloat(value, boost).apply {
             duration = (100 + abs(value - boost) * 5).toLong()
             interpolator = DecelerateInterpolator()
