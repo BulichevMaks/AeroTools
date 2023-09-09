@@ -85,6 +85,8 @@ class VarioViewDown : View {
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
 
+        paint.strokeWidth = 0.1f
+        canvas?.drawLine(0f, 0f, 0F,-1f, paint)
         paint.strokeWidth = 0.01f
         canvas?.drawLine(0f, 0f, 0.5F,0f, paint)
         paint.strokeWidth = 0.01f
