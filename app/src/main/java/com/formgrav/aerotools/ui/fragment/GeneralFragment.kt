@@ -1,43 +1,23 @@
 package com.formgrav.aerotools.ui.fragment
 
 import android.animation.ValueAnimator
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.media.ToneGenerator
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
-import com.formgrav.aerotools.R
 import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
 import com.formgrav.aerotools.databinding.FragmentGeneralBinding
-import com.formgrav.aerotools.databinding.FragmentMapBinding
 import com.formgrav.aerotools.domain.model.AttitudeData
-import com.formgrav.aerotools.ui.activity.RootActivity
 import com.formgrav.aerotools.ui.adapters.AltAdapter
-import com.formgrav.aerotools.ui.rootfragments.DownRootFragment
-import com.yandex.mapkit.Animation
-import com.yandex.mapkit.MapKit
-import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.mapview.MapView
+import com.formgrav.aerotools.ui.adapters.SpeedAdapter
 import java.util.ArrayList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.getKoin
 
@@ -47,18 +27,28 @@ class GeneralFragment : Fragment() {
     private var alt = "0"
     private var currentPressure = ""
     private var altituds: ArrayList<AttitudeData> = arrayListOf()
-    private var adapter = AltAdapter(altituds)
+    private var speed: ArrayList<String> = arrayListOf()
+    private var altAdapter = AltAdapter(altituds)
+    private var speedAdapter = SpeedAdapter(speed)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val startValue = -250
-        val endValue = 10350
-        val step = 10
+        var startValue = -250
+        var endValue = 10350
+        var step = 10
 
         for (value in startValue..endValue step step) {
             val attitudeData = AttitudeData(value.toString(), "0")
             altituds.add(attitudeData)
+        }
+        startValue = -20
+        endValue = 250
+        step = 10
+
+        for (value in startValue..endValue step step) {
+            val speedData = value.toString()
+            speed.add(speedData)
         }
     }
 
@@ -74,7 +64,9 @@ class GeneralFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arduinoRepositoryImpl = getKoin().get<ArduinoClientImpl>()
-        binding.altTextView.text = "9999"
+        binding.altTextView.text = "57"
+        binding.speedTextView.text = "157"
+
         (arduinoRepositoryImpl as ArduinoClientImpl).counLiveData.observe(viewLifecycleOwner) { data ->
             requireActivity().runOnUiThread {
                 if (data.altitude.isNotEmpty()) {
@@ -96,7 +88,12 @@ class GeneralFragment : Fragment() {
                     val valueToScroll = ((formattedStringInt / 10) * 10).toString()
 
                    // scrollToValueWithCentering2(valueToScroll, ((offset * 10) * 2))
-                    scrollToValueWithCentering2(valueToScroll, (offset * 2))
+                    if(alt.contains("-")) {
+                        scrollToValueWithCentering2(valueToScroll, (offset * -2))
+                    } else {
+                        scrollToValueWithCentering2(valueToScroll, (offset * 2))
+                    }
+
 
                 }
             }
@@ -108,8 +105,16 @@ class GeneralFragment : Fragment() {
                 LinearLayoutManager.VERTICAL,
                 true
             )
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = altAdapter
 
+        binding.recyclerView2.layoutManager =
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                true
+            )
+        binding.recyclerView2.adapter = speedAdapter
+       // scrollToValueWithCentering2("-230", (50 * -2))
         if (arduinoRepositoryImpl.isSerialConnectionOpen()) {
 
             lifecycleScope.launch(Dispatchers.IO) {

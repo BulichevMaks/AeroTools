@@ -6,24 +6,21 @@
     android:layout_height="200px">
 
     <View
-        android:id="@+id/background"
-        android:layout_width="wrap_content"
+        android:id="@+id/background_speed_down"
+        android:layout_width="26px"
         android:layout_height="100px"
-        android:background="@color/button_pressed_color"
+        android:background="@color/green"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
-        android:id="@+id/background2"
-        android:layout_width="wrap_content"
+        android:id="@+id/background_speed_up"
+        android:layout_width="26px"
         android:layout_height="100px"
-        android:background="@color/button_pressed_color"
+        android:background="@color/green"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -31,17 +28,16 @@
         android:layout_width="14dp"
         android:layout_height="4dp"
         android:background="@color/light_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/alt_value"
-        app:layout_constraintBottom_toBottomOf="@+id/alt_value"
-        app:layout_constraintEnd_toStartOf="@+id/alt_value" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/horizontalDividerView2"
         android:layout_width="8dp"
         android:layout_height="1dp"
         android:background="@color/light_gray"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -50,17 +46,17 @@
         android:layout_height="1dp"
         android:background="@color/light_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/alt_value"
-        android:layout_width="40dp"
+        android:id="@+id/speed_value"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:gravity="center_horizontal"
         android:text="100"
-        android:textSize="16sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/horizontalDividerView"
+        app:layout_constraintEnd_toStartOf="@+id/horizontalDividerView"
         app:layout_constraintTop_toTopOf="parent" />
 
 

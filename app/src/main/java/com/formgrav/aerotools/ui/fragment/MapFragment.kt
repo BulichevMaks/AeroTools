@@ -63,7 +63,7 @@ class MapFragment : Fragment() {
         // Установите начальную позицию и отобразите карту
         mapview.map.move(
             CameraPosition(Point(44.8059375, 20.45707615), 16.0f, 0.0f, 0.0f),
-            Animation(Animation.Type.SMOOTH, 10F),
+            Animation(Animation.Type.SMOOTH, 4F),
             null
         )
         val mapKit: MapKit = MapKitFactory.getInstance()

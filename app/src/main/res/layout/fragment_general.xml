@@ -9,12 +9,20 @@
     tools:context=".ui.activity.RootActivity">
 
     <ImageView
-        android:id="@+id/yourImageView"
+        android:id="@+id/altImageView"
         android:layout_width="68dp"
         android:layout_height="800px"
         android:src="@drawable/recycler_view_border"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView" />
+
+    <ImageView
+        android:id="@+id/speedImageView"
+        android:layout_width="64dp"
+        android:layout_height="800px"
+        android:src="@drawable/recycler_view_border"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView2" />
 
     <com.formgrav.aerotools.ui.customview.VarioView
         android:id="@+id/varioView"
@@ -22,8 +30,8 @@
         android:layout_height="400px"
         android:background="@drawable/varoi_view_border"
         android:src="@drawable/recycler_view_border"
-        app:layout_constraintStart_toEndOf="@+id/yourImageView"
-        app:layout_constraintTop_toTopOf="@+id/yourImageView" />
+        app:layout_constraintStart_toEndOf="@+id/altImageView"
+        app:layout_constraintTop_toTopOf="@+id/altImageView" />
 
     <com.formgrav.aerotools.ui.customview.VarioViewDown
         android:id="@+id/varioViewDown"
@@ -31,21 +39,50 @@
         android:layout_height="400px"
 
         android:background="@drawable/varoi_view_border"
-        app:layout_constraintBottom_toBottomOf="@+id/yourImageView"
-        app:layout_constraintStart_toEndOf="@+id/yourImageView" />
+        app:layout_constraintBottom_toBottomOf="@+id/altImageView"
+        app:layout_constraintStart_toEndOf="@+id/altImageView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="68dp"
         android:layout_height="800px"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="32dp"
-        android:background="@android:color/transparent"
+        android:layout_marginEnd="26dp"
+
         android:nestedScrollingEnabled="false"
         android:src="@drawable/recycler_view_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="64dp"
+        android:layout_height="800px"
+        android:layout_alignParentTop="true"
+
+        android:nestedScrollingEnabled="true"
+        android:src="@drawable/recycler_view_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/speed_text_view"
+        android:layout_width="200px"
+        android:layout_height="wrap_content"
+        android:background="@drawable/right_arrow"
+
+        android:gravity="center_vertical|center"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp"
+        android:text="157"
+        android:textColor="@color/red"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintEnd_toEndOf="@+id/speedImageView"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView2" />
 
     <TextView
         android:id="@+id/alt_text_view"
@@ -57,22 +94,14 @@
         android:gravity="center_vertical|center"
         android:paddingStart="4dp"
         android:paddingEnd="8dp"
-        android:text="100"
-        android:textColor="@color/red"
-        android:textSize="22sp"
+        android:text="0000"
+        android:textColor="@color/light_gray"
+        android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_1"
