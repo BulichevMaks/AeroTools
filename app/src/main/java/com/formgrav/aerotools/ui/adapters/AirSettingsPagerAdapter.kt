@@ -6,13 +6,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.formgrav.aerotools.ui.tabfragments.GrayLineFragment
 import com.formgrav.aerotools.ui.tabfragments.GreenLineFragment
+import com.formgrav.aerotools.ui.tabfragments.RedLine2Fragment
 import com.formgrav.aerotools.ui.tabfragments.RedLineFragment
 import com.formgrav.aerotools.ui.tabfragments.YellowLineFragment
 
 class AirSettingsPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    override fun getItemCount(): Int = 4 // Количество вкладок
+    override fun getItemCount(): Int = 5 // Количество вкладок
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
@@ -20,6 +21,7 @@ class AirSettingsPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifec
             1 -> GreenLineFragment.newInstance()
             2 -> YellowLineFragment.newInstance()
             3 -> RedLineFragment.newInstance()
+            4 -> RedLine2Fragment.newInstance()
 
             else -> throw IllegalArgumentException("Invalid position")
         }

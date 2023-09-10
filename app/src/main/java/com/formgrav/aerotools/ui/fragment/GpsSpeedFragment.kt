@@ -47,8 +47,6 @@ class GpsSpeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeLocationManager()
-
-
         gpsJob = lifecycleScope.launch(Dispatchers.IO) {
             while (locationManager.isLocationEnabled) {
                 delay(200)

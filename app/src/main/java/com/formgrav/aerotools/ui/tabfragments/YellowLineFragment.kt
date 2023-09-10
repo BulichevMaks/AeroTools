@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class YellowLineFragment: Fragment() {
+class YellowLineFragment : Fragment() {
     private lateinit var binding: FragmentYellowLineBinding
     private val vm: YellowLineViewModel by viewModel()
     private lateinit var settings: Settings
@@ -46,17 +46,18 @@ class YellowLineFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.numberPicker.minValue = 1
-        binding.numberPicker.maxValue = 160
+        binding.numberPicker.minValue = 0
+        binding.numberPicker.maxValue = 159
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveStartYellowFromSettings(newVal)
             }
+            binding.numberPicker2.maxValue = 160 - newVal
         }
 
-        binding.numberPicker2.minValue = 1
-        binding.numberPicker2.maxValue = 160
+        binding.numberPicker2.minValue = 0
+        binding.numberPicker2.maxValue = 159
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
             if (activity is RootActivity) {

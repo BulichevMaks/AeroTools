@@ -46,17 +46,18 @@ class GreenLineFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.numberPicker.minValue = 1
-        binding.numberPicker.maxValue = 160
+        binding.numberPicker.minValue = 0
+        binding.numberPicker.maxValue = 159
 
         binding.numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
             if (activity is RootActivity) {
                 (activity as RootActivity).receiveStartGreenFromSettings(newVal)
             }
+            binding.numberPicker2.maxValue = 160 - newVal
         }
 
-        binding.numberPicker2.minValue = 1
-        binding.numberPicker2.maxValue = 160
+        binding.numberPicker2.minValue = 0
+        binding.numberPicker2.maxValue = 159
 
         binding.numberPicker2.setOnValueChangedListener { picker, oldVal, newVal ->
             if (activity is RootActivity) {

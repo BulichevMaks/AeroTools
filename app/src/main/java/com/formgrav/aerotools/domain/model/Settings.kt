@@ -10,4 +10,6 @@ data class Settings(
     val sweepYellowAngle: Int?,
     val startRedAngle: Int?,
     val sweepRedAngle: Int?,
+    val startRedAngle2: Int?,
+    val sweepRedAngle2: Int?,
 )

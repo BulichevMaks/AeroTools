@@ -9,16 +9,12 @@ import kotlinx.coroutines.Job
 
 class AirSpeedViewModel(private val crudSettingsUseCase: CRUDSettingsUseCase): ViewModel() {
 
-    private var isCountEnabled = true
-    private var timerJob: Job? = null
-
-    private val _settingsLiveData = MutableLiveData<Settings>()
-    val settingsLiveData: LiveData<Settings> = _settingsLiveData
+//    private val _settingsLiveData = MutableLiveData<Settings>()
+//    val settingsLiveData: LiveData<Settings> = _settingsLiveData
 
 
     public override fun onCleared() {
         super.onCleared()
-        timerJob?.cancel()
     }
 
     suspend fun getSettings(): Settings? {

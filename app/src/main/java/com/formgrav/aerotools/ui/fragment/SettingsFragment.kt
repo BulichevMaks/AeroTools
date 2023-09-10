@@ -53,6 +53,7 @@ class SettingsFragment : Fragment() {
                 1 -> "Green line"
                 2 -> "Yellow line"
                 3 -> "Red line"
+                4 -> "Red line2"
                 else -> ""
             }
         }.attach()
