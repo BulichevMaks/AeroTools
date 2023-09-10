@@ -5,23 +5,96 @@
     android:layout_width="match_parent"
     android:layout_height="200px">
 
-    <View
-        android:id="@+id/background_speed_down"
-        android:layout_width="26px"
-        android:layout_height="100px"
-        android:background="@color/green"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+<!--    <View-->
+<!--        android:id="@+id/background_speed_1"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
 
-    <View
-        android:id="@+id/background_speed_up"
-        android:layout_width="26px"
-        android:layout_height="100px"
-        android:background="@color/green"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_2"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_1"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_3"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_4"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_3"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_5"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_4"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_6"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_5"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_7"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_6"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_8"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_7"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_9"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/background_speed_8"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/background_speed_10"-->
+<!--        android:layout_width="26px"-->
+<!--        android:layout_height="20px"-->
+<!--        android:background="@color/green"-->
+
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
     <View
         android:id="@+id/horizontalDividerView"

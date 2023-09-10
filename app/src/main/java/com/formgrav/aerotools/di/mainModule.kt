@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.formgrav.aerotools.data.converters.SettingsDbConvertor
 import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
 import com.formgrav.aerotools.data.datasourse.room.AppDatabase
+import com.formgrav.aerotools.data.datasourse.room.MIGRATION_1_2
 import com.formgrav.aerotools.data.repository.ArduinoRepositoryImpl
 import com.formgrav.aerotools.data.repository.SettingsRepositoryImpl
 import com.formgrav.aerotools.domain.api.ArduinoRepository
@@ -16,6 +17,7 @@ import com.formgrav.aerotools.ui.tabfragments.GrayLineFragment
 import com.formgrav.aerotools.ui.viewmodel.AirSpeedViewModel
 import com.formgrav.aerotools.ui.viewmodel.GrayLineViewModel
 import com.formgrav.aerotools.ui.viewmodel.GreenLineViewModel
+import com.formgrav.aerotools.ui.viewmodel.RedLine2ViewModel
 import com.formgrav.aerotools.ui.viewmodel.RedLineViewModel
 import com.formgrav.aerotools.ui.viewmodel.SpeedViewModel
 import com.formgrav.aerotools.ui.viewmodel.YellowLineViewModel
@@ -46,6 +48,9 @@ val mainModule = module {
     viewModel {
         RedLineViewModel(get())
     }
+    viewModel {
+        RedLine2ViewModel(get())
+    }
 
     single {
         Handler(Looper.getMainLooper())
@@ -72,6 +77,7 @@ val mainModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 

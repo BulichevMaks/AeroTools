@@ -19,10 +19,5 @@ interface SettingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSettings(settings: SettingsEntity)
 
-//    @Query("SELECT * FROM settings_table WHERE trackId = :trackId")
-//    suspend fun getTrack(trackId: Long): SettingsEntity?
-//
-//    @Query("DELETE FROM settings_table WHERE trackId = :trackId")
-//    suspend fun deleteById(trackId: Long): Int
 
 }

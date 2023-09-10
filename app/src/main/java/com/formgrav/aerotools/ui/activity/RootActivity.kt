@@ -103,6 +103,28 @@ class RootActivity: AppCompatActivity() {
             }
         }
     }
+    fun receiveStartRed2FromSettings(start: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveStartRed2FromSettings(start)
+            }
+        }
+    }
+    fun receiveEndRed2FromSettings(end: Int) {
+        val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
+
+        if (containerFragment is NavHostFragment) {
+            val currentFragment = containerFragment.childFragmentManager.fragments.firstOrNull()
+            val airSpeedFragment = currentFragment?.childFragmentManager?.fragments?.firstOrNull { it is AirSpeedFragment } as? AirSpeedFragment
+            if (airSpeedFragment is AirSpeedFragment) {
+                airSpeedFragment.receiveEndRed2FromSettings(end)
+            }
+        }
+    }
     fun receiveStartGreenFromSettings(start: Int) {
         val containerFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1)
 

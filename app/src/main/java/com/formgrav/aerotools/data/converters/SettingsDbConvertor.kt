@@ -18,6 +18,8 @@ class SettingsDbConvertor {
                 sweepYellowAngle = settings.sweepYellowAngle,
                 startRedAngle = settings.startRedAngle,
                 sweepRedAngle = settings.sweepRedAngle,
+                startRedAngle2 = settings.startRedAngle2,
+                sweepRedAngle2 = settings.sweepRedAngle2,
             )
         } else return null
     }
@@ -33,6 +35,8 @@ class SettingsDbConvertor {
             sweepYellowAngle = settings.sweepYellowAngle,
             startRedAngle = settings.startRedAngle,
             sweepRedAngle = settings.sweepRedAngle,
+            startRedAngle2 = settings.startRedAngle2,
+            sweepRedAngle2 = settings.sweepRedAngle2,
         )
     }
 //

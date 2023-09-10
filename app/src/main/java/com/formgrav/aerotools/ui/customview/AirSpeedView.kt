@@ -57,6 +57,16 @@ class AirSpeedView : View {
         field = newValue
         invalidate()
     }
+    private var startRedAngle2: Float = -180f// начальный угол дуги
+    set(newValue) {
+        field = newValue
+        invalidate()
+    }
+    private var sweepRedAngle2: Float = -89f// угол дуги
+    set(newValue) {
+        field = newValue
+        invalidate()
+    }
 
     private var value: Int = 0
         set(newValue) {
@@ -164,6 +174,12 @@ class AirSpeedView : View {
         paint.color = Color.argb(235, 241, 19, 2)// цвет дуги красный
         oval = RectF(-0.96f, -0.96f, 0.96f, 0.96f)
         canvas?.drawArc(oval, startRedAngle, sweepRedAngle, false, paint)
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 0.03f // толщина дуги
+        paint.color = Color.argb(205, 201, 19, 20)// цвет дуги красный2
+        oval = RectF(-0.96f, -0.96f, 0.96f, 0.96f)
+        canvas?.drawArc(oval, startRedAngle2, sweepRedAngle2, false, paint)
 
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 0.012f // толщина дуги
@@ -351,6 +367,12 @@ class AirSpeedView : View {
     }
     fun setSweepRedAngle(value: Int) {
         sweepRedAngle = (value.toFloat() * 2.25f) * -1f
+    }
+    fun setStartRedAngle2(value: Int) {
+        startRedAngle2 = (value.toFloat() - 40) * -2.25f
+    }
+    fun setSweepRedAngle2(value: Int) {
+        sweepRedAngle2 = (value.toFloat() * 2.25f) * -1f
     }
 }
 

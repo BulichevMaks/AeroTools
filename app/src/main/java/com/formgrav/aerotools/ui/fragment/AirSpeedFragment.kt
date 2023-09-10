@@ -30,6 +30,8 @@ class AirSpeedFragment : Fragment() {
     private var sweepYellowAngle = 20
     private var startRedAngle = 120
     private var sweepRedAngle = 40
+    private var startRedAngle2 = 120
+    private var sweepRedAngle2 = 40
     var speedKmPerHour: Float = 0.0F
     var gpsJob: Job? = null
 
@@ -47,8 +49,9 @@ class AirSpeedFragment : Fragment() {
         var settings: Settings?
         lifecycleScope.launch(Dispatchers.IO) {
             settings = vm.getSettings()
-            Log.d("SETT", "$settings")
-            if (settings == null) {
+            Log.d("SETTINGSDATA","settings $settings")
+            Log.d("SETTINGSDATA","startRedAngle2 ${settings?.startRedAngle2}")
+            if (settings == null || settings?.startRedAngle2 == null || settings?.sweepRedAngle2 == null) {
                 vm.insertSettings(Settings(
                     id = 1,
                     startGrayAngle = 40,
@@ -59,6 +62,8 @@ class AirSpeedFragment : Fragment() {
                     sweepYellowAngle = 20,
                     startRedAngle = 120,
                     sweepRedAngle = 40,
+                    startRedAngle2 = 0,
+                    sweepRedAngle2 = 10,
                 ))
             } else {
                  startGrayAngle = settings!!.startGrayAngle!!
@@ -69,6 +74,8 @@ class AirSpeedFragment : Fragment() {
                  sweepYellowAngle = settings!!.sweepYellowAngle!!
                  startRedAngle = settings!!.startRedAngle!!
                  sweepRedAngle = settings!!.sweepRedAngle!!
+                startRedAngle2 = settings!!.startRedAngle2!!
+                sweepRedAngle2 = settings!!.sweepRedAngle2!!
             }
         }
     }
@@ -77,7 +84,6 @@ class AirSpeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             delay(500)
-            Log.d("SETT22", "${vm.getSettings()}")
             withContext(Dispatchers.Main) {
                 binding.speedView.setStartGrayAngle(startGrayAngle)
                 binding.speedView.setSweepGrayAngle(sweepGrayAngle)
@@ -85,8 +91,11 @@ class AirSpeedFragment : Fragment() {
                 binding.speedView.setSweepYellowAngle(sweepYellowAngle)
                 binding.speedView.setStartRedAngle(startRedAngle)
                 binding.speedView.setSweepRedAngle(sweepRedAngle)
+                binding.speedView.setStartRedAngle2(startRedAngle2)
+                binding.speedView.setSweepRedAngle2(sweepRedAngle2)
                 binding.speedView.setStartGreenAngle(startGreenAngle)
                 binding.speedView.setSweepGreenAngle(sweepGreenAngle)
+
             }
         }
     }
@@ -120,6 +129,15 @@ class AirSpeedFragment : Fragment() {
         binding.speedView.setSweepRedAngle(end)
         sweepRedAngle = end
     }
+    fun receiveStartRed2FromSettings(start: Int) {
+        binding.speedView.setStartRedAngle2(start)
+        startRedAngle2 = start
+    }
+
+    fun receiveEndRed2FromSettings(end: Int) {
+        binding.speedView.setSweepRedAngle2(end)
+        sweepRedAngle2 = end
+    }
 
     fun receiveStartGreenFromSettings(start: Int) {
         binding.speedView.setStartGreenAngle(start)
@@ -144,6 +162,8 @@ class AirSpeedFragment : Fragment() {
                 sweepYellowAngle,
                 startRedAngle,
                 sweepRedAngle,
+                startRedAngle2,
+                sweepRedAngle2,
             ))
         }
     }

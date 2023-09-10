@@ -56,6 +56,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewColor"
+        android:layout_width="26px"
+        android:layout_height="800px"
+        android:layout_alignParentTop="true"
+
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toBottomOf="@+id/speedImageView"
+        app:layout_constraintEnd_toEndOf="@+id/speedImageView"
+        app:layout_constraintTop_toTopOf="@+id/speedImageView" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
         android:layout_width="64dp"
         android:layout_height="800px"
@@ -66,6 +77,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <TextView
         android:id="@+id/speed_text_view"
