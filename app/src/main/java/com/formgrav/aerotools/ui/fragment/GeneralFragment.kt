@@ -1,8 +1,11 @@
 package com.formgrav.aerotools.ui.fragment
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -37,6 +40,7 @@ class GeneralFragment : Fragment() {
     private val vm: AirSpeedViewModel by viewModel()
     private lateinit var arduinoRepositoryImpl: ArduinoClientImpl
     private lateinit var locationManager: LocationManager
+
     var speedKmPerHour: Float = 0.0F
     var gpsJob: Job? = null
     private var alt = "0"
@@ -47,6 +51,13 @@ class GeneralFragment : Fragment() {
     private var altAdapter = AltAdapter(altituds)
     private var speedAdapter = SpeedAdapter(speed)
     private var speedColorAdapter = SpeedColorAdapter(speedColors)
+    private var acsel = FloatArray(3)
+    private var giro = FloatArray(3)
+    private var gravity = FloatArray(9)
+    private var magnetic = FloatArray(9)
+    private var valuesOrientation = FloatArray(3)
+    var degreeX = 0f
+    var degreeY = 0f
     private var startGrayAngle = 0
     private var sweepGrayAngle = 10
     private var startGreenAngle = 10
@@ -130,16 +141,6 @@ class GeneralFragment : Fragment() {
                 speedColorAdapter.setSweepRedAngle2(settings!!.sweepRedAngle2!!)
             }
         }
-//        Log.d("SETTINGS2", "startGrayAngle: $startGrayAngle")
-//        speedColorAdapter.setStartGrayAngle(startGrayAngle)
-//        speedColorAdapter.setSweepGrayAngle(sweepGrayAngle)
-//        speedColorAdapter.setStartGreenAngle(startGreenAngle)
-//        speedColorAdapter.setSweepGreenAngle(sweepGreenAngle)
-//        speedColorAdapter.setStartYellowAngle(startYellowAngle)
-//        speedColorAdapter.setSweepYellowAngle(sweepYellowAngle)
-//        speedColorAdapter.setStartRedAngle(startRedAngle)
-//        speedColorAdapter.setSweepRedAngle(sweepRedAngle)
-
     }
 
     override fun onCreateView(
@@ -161,8 +162,6 @@ class GeneralFragment : Fragment() {
             requireActivity().runOnUiThread {
                 if (data.altitude.isNotEmpty()) {
                     alt = data.altitude
-
-                    //  Log.d("CHILD5", "$alt")
                     var formattedString = data.altitude.substring(0, data.altitude.length - 1)
                     if (formattedString.isEmpty() || formattedString == "-") {
                         formattedString = "0"
@@ -170,21 +169,17 @@ class GeneralFragment : Fragment() {
                     if (data.pressure != "" && !data.pressure.contains("_")) {
                         currentPressure = data.pressure
                     }
-                    //  Log.d("CHILD5", "$formattedString")
                     binding.altTextView.text = formattedString
                     val lastTwoChars = data.altitude.takeLast(2)
                     val offset = lastTwoChars.toInt()
                     val formattedStringInt = formattedString.toInt()
                     val valueToScroll = ((formattedStringInt / 10) * 10).toString()
 
-                    // scrollToValueWithCentering2(valueToScroll, ((offset * 10) * 2))
                     if (alt.contains("-")) {
                         scrollToValueWithCentering2(valueToScroll, (offset * -2))
                     } else {
                         scrollToValueWithCentering2(valueToScroll, (offset * 2))
                     }
-
-
                 }
             }
         }
@@ -271,14 +266,15 @@ class GeneralFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     val speedKmPerHourInt = speedKmPerHour.toInt()
                     binding.speedTextView.text = "$speedKmPerHourInt"
-
-
                     val lastTwoChars = speedKmPerHourInt.toString().takeLast(1)
                     val offset = lastTwoChars.toInt() * 10
                     val valueToScroll = ((speedKmPerHourInt / 10) * 10).toString()
                     val valueToScrollColor = speedKmPerHourInt.toString()
                     //   Log.d("valueToScroll", "$valueToScrollColor")
                     scrollToValueWithCenteringSpeed(valueToScroll, valueToScrollColor, (offset * 2))
+                 //   Log.d("DEGREE", "$degreeX")
+                    binding.groundSky.setXX(degreeX)
+                    binding.groundSky.setYY(degreeY)
 
                 }
             }
@@ -339,12 +335,60 @@ class GeneralFragment : Fragment() {
                 REQUEST_CODE
             )
         }
-
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             MIN_TIME_BETWEEN_UPDATES,
             MIN_DISTANCE_CHANGE_FOR_UPDATES,
             locationListener
+        )
+        val sensorManager2 =
+            requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager2.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val gyroscope = sensorManager2.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        val accelGiroListener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent?) {
+                when (event?.sensor?.type) {
+                    Sensor.TYPE_ACCELEROMETER -> acsel = event.values.clone()
+                    Sensor.TYPE_GYROSCOPE -> giro = event.values.clone()
+                }
+
+                SensorManager.getRotationMatrix(gravity, magnetic, acsel, giro)
+                var outGravity = FloatArray(9)
+                SensorManager.remapCoordinateSystem(
+                    gravity,
+                    SensorManager.AXIS_X,
+                    SensorManager.AXIS_Z,
+                    outGravity
+                )
+                SensorManager.getOrientation(outGravity, valuesOrientation)
+                degreeX = valuesOrientation[2] * 57.2958f
+                SensorManager.remapCoordinateSystem(
+                    gravity,
+                    SensorManager.AXIS_Y,
+                    SensorManager.AXIS_Z,
+                    outGravity
+                )
+                SensorManager.getOrientation(outGravity, valuesOrientation)
+                degreeY = (valuesOrientation[2] * 57.2958f) / 100
+                Log.d("DEGREE_Y", "${valuesOrientation[2] * 57.2958f}")
+             //   Log.d("DEGREE_X", "$degreeX")
+//                binding.groundSky.setXX(degree)
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                // Обработка изменения точности
+            }
+        }
+
+        sensorManager2.registerListener(
+            accelGiroListener,
+            accelerometer,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+        sensorManager2.registerListener(
+            accelGiroListener,
+            gyroscope,
+            SensorManager.SENSOR_DELAY_NORMAL
         )
     }
 

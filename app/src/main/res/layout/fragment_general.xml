@@ -4,13 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="@drawable/background_general_fragment"
     tools:context=".ui.activity.RootActivity">
+
+    <com.formgrav.aerotools.ui.customview.BackgroundView
+        android:id="@+id/ground_sky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/altImageView"
-        android:layout_width="68dp"
+        android:layout_width="64dp"
         android:layout_height="800px"
         android:src="@drawable/recycler_view_border"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
@@ -44,7 +51,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="68dp"
+        android:layout_width="64dp"
         android:layout_height="800px"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="26dp"
@@ -195,6 +202,15 @@
         android:text="4"
         app:layout_constraintBottom_toBottomOf="@+id/varioViewDown"
         app:layout_constraintEnd_toEndOf="@+id/varioView" />
+
+    <com.formgrav.aerotools.ui.customview.CenterPointView
+        android:id="@+id/textView5"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
