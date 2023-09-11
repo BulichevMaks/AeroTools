@@ -362,6 +362,7 @@ class GeneralFragment : Fragment() {
                 )
                 SensorManager.getOrientation(outGravity, valuesOrientation)
                 degreeX = valuesOrientation[2] * 57.2958f
+                Log.d("DEGREE_X", "$degreeX")
                 SensorManager.remapCoordinateSystem(
                     gravity,
                     SensorManager.AXIS_Y,
@@ -369,8 +370,8 @@ class GeneralFragment : Fragment() {
                     outGravity
                 )
                 SensorManager.getOrientation(outGravity, valuesOrientation)
-                degreeY = (valuesOrientation[2] * 57.2958f) / 100
-                Log.d("DEGREE_Y", "${valuesOrientation[2] * 57.2958f}")
+                degreeY = ((valuesOrientation[2] * 57.2958f) / 100) * 4f
+              //  Log.d("DEGREE_Y", "${valuesOrientation[2] * 57.2958f}")
              //   Log.d("DEGREE_X", "$degreeX")
 //                binding.groundSky.setXX(degree)
             }
