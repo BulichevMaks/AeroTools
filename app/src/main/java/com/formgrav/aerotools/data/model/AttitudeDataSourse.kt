@@ -5,6 +5,8 @@ import com.formgrav.aerotools.domain.model.AttitudeData
 data class AttitudeDataSourse(
     val altitude: String,
     val pressure: String,
+    val roll: String,
+    val pitch: String,
 )
-fun AttitudeDataSourse.toDomainModel() = AttitudeData(altitude, pressure)
+fun AttitudeDataSourse.toDomainModel() = AttitudeData(altitude, pressure, roll, pitch)
 

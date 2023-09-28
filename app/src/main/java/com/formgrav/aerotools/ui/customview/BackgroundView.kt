@@ -4,13 +4,10 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.Shader
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import kotlin.math.abs
@@ -138,109 +135,260 @@ class BackgroundView : View {
         paint.color = Color.argb(200, 160, 73, 2)
         val downHalfRect = RectF(-1.6f, angleY * -1f, 1.6f, -1.6f)
         canvas?.drawRect(downHalfRect, paint)
-
-        //линии
+//-------------------------------------------
         var strokeHight = 0.0025f
-//        val lineCount = 28 // Количество линий (включая вертикальную)
-//        val verticalOffset = 0.1f // Вертикальное смещение
-//
-//        for (i in 0 until lineCount) {
-//            val yOffset = (i - lineCount / 2) * verticalOffset // Рассчитываем смещение по вертикали
-//
-//            if (abs(yOffset - 0.2f) > 0.01f) { // Исключаем вертикальные смещения 0.1, 0.3, 0.5, 0.7 и так далее
-//                paint.color = Color.WHITE
-//                paint.style = Paint.Style.STROKE
-//                paint.strokeWidth = if (i % 4 == 0) strokeHight + 0.001f else strokeHight
-//
-//                val x1 = if (i % 4 == 0) -0.4f else -0.25f // Альтернирующее начальное положение X
-//                val x2 = if (i % 4 == 0) x1 + 0.8f else x1 + 0.5f // Длина линии
-//
-//                val y1 = (angleY * -1f) + yOffset
-//                val y2 = y1
-//
-//                canvas?.drawLine(x1, y1, x2, y2, paint)
-//            }
-//        }
-
-//        strokeHight = 0.0025f
+        // Цвет, стиль и толщина линии
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, angleY * -1f, 0.4F, angleY * -1f, paint)
 
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.1f, 0.2F, (angleY * -1f) + 0.1f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) + 0.2f, 0.25F, (angleY * -1f) + 0.2f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.3f, 0.2F, (angleY * -1f) + 0.3f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) + 0.4f, 0.4F, (angleY * -1f) + 0.4f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.5f, 0.2F, (angleY * -1f) + 0.5f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) + 0.6f, 0.25F, (angleY * -1f) + 0.6f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.7f, 0.2F, (angleY * -1f) + 0.7f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) + 0.8f, 0.4F, (angleY * -1f) + 0.8f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.9f, 0.2F, (angleY * -1f) + 0.9f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) + 1f, 0.25F, (angleY * -1f) + 1f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.1f, 0.2F, (angleY * -1f) + 1.1f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) + 1.2f, 0.4F, (angleY * -1f) + 1.2f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.3f, 0.2F, (angleY * -1f) + 1.3f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) + 1.4f, 0.25F, (angleY * -1f) + 1.4f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.6f, 0.2F, (angleY * -1f) + 1.6f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) + 1.7f, 0.4F, (angleY * -1f) + 1.7f, paint)
+// Начальная позиция Y
+        var startY = (angleY * -1f)
+        var step1 = 0.2f
+// Количество линий
+        val numLines = -10
+        var currentValue = 1
+        var currentValue2 = -1
+// Отрисовка линий в цикле
+        for (i in -numLines downTo numLines) {
 
+                if (i >= 0) {
+                    if(startY < 0.49f) {
+                        val step = 0.2f
+                        val endY = startY + step
 
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.1f, 0.2F, (angleY * -1f) - 0.1f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) - 0.2f, 0.25F, (angleY * -1f) - 0.2f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.3f, 0.2F, (angleY * -1f) - 0.3f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) - 0.4f, 0.4F, (angleY * -1f) - 0.4f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.5f, 0.2F, (angleY * -1f) - 0.5f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) - 0.6f, 0.25F, (angleY * -1f) - 0.6f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.7f, 0.2F, (angleY * -1f) - 0.7f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) - 0.8f, 0.4F, (angleY * -1f) - 0.8f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.9f, 0.2F, (angleY * -1f) - 0.9f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) - 1f, 0.25F, (angleY * -1f) - 1f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.1f, 0.2F, (angleY * -1f) - 1.1f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) - 1.2f, 0.4F, (angleY * -1f) - 1.2f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.3f, 0.2F, (angleY * -1f) - 1.3f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.25f, (angleY * -1f) - 1.4f, 0.25F, (angleY * -1f) - 1.4f, paint)
-        paint.strokeWidth = strokeHight
-        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.5f, 0.2F, (angleY * -1f) - 1.5f, paint)
-        paint.strokeWidth = strokeHight + 0.001f
-        canvas?.drawLine(-0.4f, (angleY * -1f) - 1.6f, 0.4F, (angleY * -1f) - 1.6f, paint)
+                        if (i % 2 == 0) {
+                            paint.strokeWidth = strokeHight + 0.001f
+                            canvas?.drawLine(-0.3f, startY, 0.3f, startY, paint)
+                            startY = endY
 
+                        } else {
+                            paint.strokeWidth = strokeHight
+                            paint.strokeWidth = strokeHight
+                            canvas?.drawLine(-0.15f, startY, 0.15f, startY, paint)
+                            startY = endY
+                            if(startY < 0.41f) {
+                                // Отрисовка цифр на каждой второй линии
+                                val textY =
+                                    startY - 0.025f // Позиция Y для отрисовки текста с учетом смещения вверх
+                                val textPaint = Paint()
+                                textPaint.color = Color.WHITE
+                                textPaint.textSize = 0.08f
+                                textPaint.textAlign = Paint.Align.CENTER
+
+                                // Переворачиваем Canvas на 180 градусов
+                                canvas?.save()
+                                canvas?.rotate(180f, 0.0f, textY)
+                                canvas?.scale(-1f, 1f, 0.0f, textY) // Отразить по горизонтали
+                                val valueString = currentValue.toString()
+                                var textX = 0.34f // Центрирование текста относительно X
+                                canvas?.drawText(valueString, textX, textY, textPaint)
+                                canvas?.drawText("0", textX + 0.05f, textY, textPaint)
+                                textX = -0.43f
+                                canvas?.drawText(valueString, textX, textY, textPaint)
+                                canvas?.drawText("0", textX + 0.05f, textY, textPaint)
+                                canvas?.restore()
+                                currentValue += 1
+                            }
+                        }
+                    }
+                } else {
+
+                    if (i % 2 == 0) {
+                        paint.strokeWidth = strokeHight + 0.001f
+                        canvas?.drawLine(
+                            -0.3f,
+                            (angleY * -1f) - step1,
+                            0.3f,
+                            (angleY * -1f) - step1,
+                            paint
+                        )
+                        step1 += 0.2f
+
+                    } else {
+                        paint.strokeWidth = strokeHight
+                        paint.strokeWidth = strokeHight
+                        canvas?.drawLine(
+                            -0.15f,
+                            (angleY * -1f) - step1,
+                            0.15f,
+                            (angleY * -1f) - step1,
+                            paint
+                        )
+                        step1 += 0.2f
+
+                        // Отрисовка цифр на каждой второй линии
+                        val textY =
+                            (angleY * -1f) - step1 - 0.02f// Позиция Y для отрисовки текста с учетом смещения вверх
+                        val textPaint = Paint()
+                        textPaint.color = Color.WHITE
+                        textPaint.textSize = 0.07f
+                        textPaint.textAlign = Paint.Align.CENTER
+
+                        // Переворачиваем Canvas на 180 градусов
+                        canvas?.save()
+                        canvas?.rotate(180f, 0.0f, textY)
+                        canvas?.scale(-1f, 1f, 0.0f, textY) // Отразить по горизонтали
+                        if (currentValue2 == 0) {
+                            var textX = 0.32f // Центрирование текста относительно X
+
+                            canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+                            textX = -0.44f
+
+                            canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+                        } else {
+                            val valueString2 = abs(currentValue2).toString()
+                            var textX = 0.36f // Центрирование текста относительно X
+                            canvas?.drawText(valueString2, textX, textY, textPaint)
+                            canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+                            textX = -0.4f
+                            canvas?.drawText(valueString2, textX, textY, textPaint)
+                            canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+                            textX = -0.465f
+                            canvas?.drawText("-", textX + 0.04f, textY, textPaint)
+                            textX = 0.28f
+                            canvas?.drawText("-", textX + 0.04f, textY, textPaint)
+                        }
+                        canvas?.restore()
+                        currentValue2 -= 1
+                    }
+                }
+        }
+//-------------------------------------------
+        //-------------------------------------------
+//        currentValue = 4
+//// Отрисовка линий в цикле
+//        for (i in 0 until 11) {
+//            val endY = startY - step
+//
+//            if (i % 2 == 0) {
+//                paint.strokeWidth = strokeHight + 0.001f
+//                canvas?.drawLine(-0.3f, -startY, 0.3f, -startY, paint)
+//                startY = endY
+//
+//            } else {
+//                paint.strokeWidth = strokeHight
+//                paint.strokeWidth = strokeHight
+//                canvas?.drawLine(-0.15f, -startY, 0.15f, -startY, paint)
+//                startY = endY
+//
+//                // Отрисовка цифр на каждой второй линии
+//                val textY = -startY - 0.02f // Позиция Y для отрисовки текста с учетом смещения вверх
+//                val textPaint = Paint()
+//                textPaint.color = Color.WHITE
+//                textPaint.textSize = 0.07f
+//                textPaint.textAlign = Paint.Align.CENTER
+//
+//                // Переворачиваем Canvas на 180 градусов
+//                canvas?.save()
+//                canvas?.rotate(180f, 0.0f, textY)
+//                canvas?.scale(-1f, 1f, 0.0f, textY) // Отразить по горизонтали
+//                if(currentValue == 0) {
+//                    val valueString = currentValue.toString()
+//                    var textX = 0.32f // Центрирование текста относительно X
+//
+//                    canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+//                    textX = -0.44f
+//
+//                    canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+//                } else {
+//                    val valueString = currentValue.toString()
+//                    var textX = 0.36f // Центрирование текста относительно X
+//                    canvas?.drawText(valueString, textX, textY, textPaint)
+//                    canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+//                    textX = -0.4f
+//                    canvas?.drawText(valueString, textX, textY, textPaint)
+//                    canvas?.drawText("0", textX + 0.04f, textY, textPaint)
+//                    textX = -0.465f
+//                    canvas?.drawText("-", textX + 0.04f, textY, textPaint)
+//                    textX = 0.28f
+//                    canvas?.drawText("-", textX + 0.04f, textY, textPaint)
+//                }
+//                canvas?.restore()
+//                currentValue -= 1
+//            }
+//        }
+//-------------------------------------------
+//        //линии
+//        var strokeHight = 0.0025f
+//
+//        paint.color = Color.WHITE
+//        paint.style = Paint.Style.STROKE
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, angleY * -1f, 0.4F, angleY * -1f, paint)
+//
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.1f, 0.2F, (angleY * -1f) + 0.1f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) + 0.2f, 0.25F, (angleY * -1f) + 0.2f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.3f, 0.2F, (angleY * -1f) + 0.3f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) + 0.4f, 0.4F, (angleY * -1f) + 0.4f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.5f, 0.2F, (angleY * -1f) + 0.5f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) + 0.6f, 0.25F, (angleY * -1f) + 0.6f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.7f, 0.2F, (angleY * -1f) + 0.7f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) + 0.8f, 0.4F, (angleY * -1f) + 0.8f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 0.9f, 0.2F, (angleY * -1f) + 0.9f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) + 1f, 0.25F, (angleY * -1f) + 1f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.1f, 0.2F, (angleY * -1f) + 1.1f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) + 1.2f, 0.4F, (angleY * -1f) + 1.2f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.3f, 0.2F, (angleY * -1f) + 1.3f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) + 1.4f, 0.25F, (angleY * -1f) + 1.4f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) + 1.6f, 0.2F, (angleY * -1f) + 1.6f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) + 1.7f, 0.4F, (angleY * -1f) + 1.7f, paint)
+
+//
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.1f, 0.2F, (angleY * -1f) - 0.1f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) - 0.2f, 0.25F, (angleY * -1f) - 0.2f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.3f, 0.2F, (angleY * -1f) - 0.3f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) - 0.4f, 0.4F, (angleY * -1f) - 0.4f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.5f, 0.2F, (angleY * -1f) - 0.5f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) - 0.6f, 0.25F, (angleY * -1f) - 0.6f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.7f, 0.2F, (angleY * -1f) - 0.7f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) - 0.8f, 0.4F, (angleY * -1f) - 0.8f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 0.9f, 0.2F, (angleY * -1f) - 0.9f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) - 1f, 0.25F, (angleY * -1f) - 1f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.1f, 0.2F, (angleY * -1f) - 1.1f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) - 1.2f, 0.4F, (angleY * -1f) - 1.2f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.3f, 0.2F, (angleY * -1f) - 1.3f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.25f, (angleY * -1f) - 1.4f, 0.25F, (angleY * -1f) - 1.4f, paint)
+//        paint.strokeWidth = strokeHight
+//        canvas?.drawLine(-0.2f, (angleY * -1f) - 1.5f, 0.2F, (angleY * -1f) - 1.5f, paint)
+//        paint.strokeWidth = strokeHight + 0.001f
+//        canvas?.drawLine(-0.4f, (angleY * -1f) - 1.6f, 0.4F, (angleY * -1f) - 1.6f, paint)
 
 
         canvas.rotate(140f)
         // цифры
         val scalePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        scalePaint.color = Color.WHITE
+        scalePaint.color = Color.YELLOW
         scalePaint.strokeWidth = 0.02F
         val centerX = 0F // X-координата центра
         val centerY = 0F // Y-координата центра
@@ -265,7 +413,7 @@ class BackgroundView : View {
                 scalePaint.color = Color.RED
                 scalePaint.strokeWidth = 0.035f
             } else {
-                scalePaint.color = Color.WHITE
+                scalePaint.color = Color.YELLOW
                 scalePaint.strokeWidth = 0.02F
             }
             canvas.drawLine(x1, y1, x2, y2, scalePaint)
@@ -277,22 +425,30 @@ class BackgroundView : View {
     }
 
 
-    fun setXX(value: Float) {
-        angleX = value
+    fun roll(value: Float) {
+        //  angleX = value
 
-//        ValueAnimator.ofFloat(angleX, value).apply {
-//            duration = (100 + abs(angleX - value) * 5).toLong()
-//            interpolator = DecelerateInterpolator()
-//            addUpdateListener { animation ->
-//                angleX = animation.animatedValue as Float
-//            }
-//            start()
-//        }
+        val animator = ValueAnimator.ofFloat(angleX, value)
+        animator.duration = (10 + abs(angleX - value) * 2).toLong()
+        animator.interpolator = DecelerateInterpolator()
+        animator.addUpdateListener { animation ->
+            angleX = animation.animatedValue as Float
+            invalidate()
+        }
+        animator.start()
     }
 
-    fun setYY(value: Float) {
-        angleY = value
-//
+    fun pitch(value: Float) {
+        //  angleY = value
+        val animator = ValueAnimator.ofFloat(angleY, value)
+        animator.duration = (100 + abs(angleY - value) * 2).toLong()
+        //  Log.d("DURATION_YY", "$angleY")
+        animator.interpolator = DecelerateInterpolator()
+        animator.addUpdateListener { animation ->
+            angleY = animation.animatedValue as Float
+            invalidate()
+        }
+        animator.start()
     }
 
     fun setZZ(value: Float) {

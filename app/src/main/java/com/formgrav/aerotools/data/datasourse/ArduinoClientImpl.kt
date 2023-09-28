@@ -67,7 +67,7 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                 0,
                                 endIndex
                             ) // Получаем полные данные до разделителя
-                            Log.d("MY_LOG", "Received data: $fullData")
+                           // Log.d("MY_LOG", "Received data: $fullData")
                             receiveBuffer.delete(
                                 0,
                                 endIndex + 1
@@ -77,7 +77,9 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                 _counLiveData.postValue(
                                     AttitudeDataSourse(
                                         altitude = "",
-                                        pressure = fullData
+                                        pressure = fullData,
+                                        roll = "",
+                                        pitch = "",
                                     )
                                 )
                             }
@@ -98,9 +100,38 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                 _counLiveData.postValue(
                                     AttitudeDataSourse(
                                         altitude = fullData,
-                                        pressure = ""
+                                        pressure = "",
+                                        roll = "",
+                                        pitch = "",
                                     )
                                 )
+                            }
+                        }
+
+                        if (receiveBuffer.contains("<")) {
+                            val endIndex = receiveBuffer.indexOf("<")
+                            val fullData = receiveBuffer.substring(0, endIndex)
+                            receiveBuffer.delete(0, endIndex + 1)
+
+                            val values = fullData.split(",")
+
+                            if (values.size >= 3) {
+                                val roll = values[1].toDoubleOrNull()
+                                val pitch = values[2].toDoubleOrNull()
+
+                                if (roll != null && pitch != null) {
+                                  //  Log.d("MY_LOG", "Received data - Roll: $roll, Pitch: $pitch")
+                                    scope.launch {
+                                        _counLiveData.postValue(
+                                            AttitudeDataSourse(
+                                                altitude = "",
+                                                pressure = "",
+                                                roll = roll.toString(),
+                                                pitch = pitch.toString(),
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -200,11 +231,11 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
 
     fun startAltFlow() {
         onClickStart()
-        Log.d("MY_LOG1", "${counLiveData.value}")
+      //  Log.d("MY_LOG1", "${counLiveData.value}")
     }
 
     fun setNewPressure(p: String) {
-        Log.d("MY_LOG", "Received data: $p")
+      //  Log.d("MY_LOG", "Received data: $p")
         serialPort.write(p.toByteArray(), 2000) //
     }
 

@@ -70,13 +70,42 @@ class CenterPointView: View {
         canvas?.scale(1f * width, -1f * height)
         canvas?.translate(1f, -1f)
         paint.style = Paint.Style.FILL
-        paint.color = Color.BLACK
+        paint.color = Color.YELLOW
         paint.style = Paint.Style.FILL
         canvas?.drawCircle(-0.5f, 0.5f, 0.05F, paint)
 
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        canvas?.drawCircle(-0.5f, 0.5f, 0.045F, paint)
+        //__________________________________-
+        paint.color = Color.YELLOW
+        paint.style = Paint.Style.STROKE
+
+        paint.strokeWidth = 0.034f
+        canvas?.drawLine(-0.39f, 0.5f, 0F,0.5f, paint)
+        paint.strokeWidth = 0.034f
+        canvas?.drawLine(-1f, 0.5f, -0.61F,0.5f, paint)
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 0.025f // толщина дуги
+        paint.color = Color.YELLOW// цвет дуги
+
+        val radius1 = 0.125f
+        canvas?.drawArc(
+            -0.5f - radius1, 0.5f - radius1, -0.5f + radius1, 0.5f + radius1,
+            180f, 180f, false, paint
+        )
+        val radius2 = 0.115f
+        canvas?.drawArc(
+            -0.5f - radius2, 0.5f - radius2, -0.5f + radius2, 0.5f + radius2,
+            180f, 180f, false, paint
+        )
+
+        //__________________________________-
+
         canvas?.save()
 
-        paint.color = Color.BLACK
+        paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
 
         paint.strokeWidth = 0.025f
@@ -86,7 +115,9 @@ class CenterPointView: View {
 
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 0.025f // толщина дуги
-        paint.color = Color.BLACK// цвет дуги
+        paint.color = Color.WHITE// цвет дуги
+
+
 
         val centerX = -0.5f
         val centerY = 0.5f
