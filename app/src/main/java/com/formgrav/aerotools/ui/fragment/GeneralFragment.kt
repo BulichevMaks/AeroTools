@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
@@ -40,9 +41,19 @@ class GeneralFragment : Fragment() {
     private val vm: AirSpeedViewModel by viewModel()
     private lateinit var arduinoRepositoryImpl: ArduinoClientImpl
     private lateinit var locationManager: LocationManager
+    private lateinit var sensorManager2: SensorManager
+    // Объявление буферов и индекса буфера для сглаживания данных
+    private val bufferSize = 160
+    private var accelGiroListener: SensorEventListener? = null
+    private val buferRole = FloatArray(bufferSize)
+    private val buferPitch = FloatArray(bufferSize)
+    private val gyroscopeBufferZ = FloatArray(bufferSize)
+    private var bufferIndex = 0
 
     var speedKmPerHour: Float = 0.0F
-    var gpsJob: Job? = null
+    private var gpsJob: Job? = null
+    private var groundSkyJob: Job? = null
+    private var verticalSpeedJob: Job? = null
     private var alt = "0"
     private var currentPressure = ""
     private var altituds: ArrayList<AttitudeData> = arrayListOf()
@@ -55,9 +66,12 @@ class GeneralFragment : Fragment() {
     private var giro = FloatArray(3)
     private var gravity = FloatArray(9)
     private var magnetic = FloatArray(9)
+    private var valuesOrientationX = FloatArray(3)
+    private var valuesOrientationY = FloatArray(3)
     private var valuesOrientation = FloatArray(3)
-    var degreeX = 0f
-    var degreeY = 0f
+    var degreeRole = 0f
+    var degreePitch = 0f
+    var degreeBall = 0f
     private var startGrayAngle = 0
     private var sweepGrayAngle = 10
     private var startGreenAngle = 10
@@ -77,7 +91,7 @@ class GeneralFragment : Fragment() {
         var step = 10
 
         for (value in startValue..endValue step step) {
-            val attitudeData = AttitudeData(value.toString(), "0")
+            val attitudeData = AttitudeData(value.toString(), "0","0","0")
             altituds.add(attitudeData)
         }
         startValue = -20
@@ -161,8 +175,14 @@ class GeneralFragment : Fragment() {
         (arduinoRepositoryImpl as ArduinoClientImpl).counLiveData.observe(viewLifecycleOwner) { data ->
             requireActivity().runOnUiThread {
                 if (data.altitude.isNotEmpty()) {
-                    alt = data.altitude
-                    var formattedString = data.altitude.substring(0, data.altitude.length - 1)
+                 //  alt = data.altitude
+                    alt = try {
+                        data.altitude.toInt()
+                        data.altitude
+                    } catch (_: NumberFormatException) {
+                        alt
+                    }
+                    var formattedString = alt.substring(0, alt.length - 1)
                     if (formattedString.isEmpty() || formattedString == "-") {
                         formattedString = "0"
                     }
@@ -170,9 +190,10 @@ class GeneralFragment : Fragment() {
                         currentPressure = data.pressure
                     }
                     binding.altTextView.text = formattedString
-                    val lastTwoChars = data.altitude.takeLast(2)
+                    val lastTwoChars = alt.takeLast(2)
                     val offset = lastTwoChars.toInt()
                     val formattedStringInt = formattedString.toInt()
+
                     val valueToScroll = ((formattedStringInt / 10) * 10).toString()
 
                     if (alt.contains("-")) {
@@ -180,6 +201,10 @@ class GeneralFragment : Fragment() {
                     } else {
                         scrollToValueWithCentering2(valueToScroll, (offset * 2))
                     }
+                }
+                if(data.roll.isNotEmpty()) {
+                    degreeRole = data.roll.toFloat()
+                    degreePitch = (data.pitch.toFloat() / 100f) * 4f
                 }
             }
         }
@@ -210,15 +235,25 @@ class GeneralFragment : Fragment() {
 
         if (arduinoRepositoryImpl.isSerialConnectionOpen()) {
 
-            lifecycleScope.launch(Dispatchers.IO) {
+            verticalSpeedJob = lifecycleScope.launch(Dispatchers.IO) {
                 delay(3000)
                 var verticalSpeed = 0.0
-                var firstAlt = alt.toInt()
+               // var firstAlt = alt.toInt()
+                var firstAlt = try {
+                    alt.toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                }
                 var prevTimestamp = System.currentTimeMillis()
                 while (arduinoRepositoryImpl.isSerialConnectionOpen()) {
 
                     delay(1000)
-                    val secondAlt = alt.toInt()
+                  //  val secondAlt = alt.toInt()
+                    val secondAlt = try {
+                        alt.toInt()
+                    } catch (_: NumberFormatException) {
+                        0
+                    }
                     val currentTimestamp = System.currentTimeMillis()
 
                     val altitudeChangePerSecond = (secondAlt - firstAlt)
@@ -235,7 +270,6 @@ class GeneralFragment : Fragment() {
 
                         when (altitudeChangePerSecond) {
                             in -2..2 -> {
-
                                 binding.varioView.setUpAnimated(0f)
                                 binding.varioViewDown.setDownAnimated(0f)
                             }
@@ -259,7 +293,9 @@ class GeneralFragment : Fragment() {
                 }
             }
         }
+
         initializeLocationManager()
+
         gpsJob = lifecycleScope.launch(Dispatchers.IO) {
             while (locationManager.isLocationEnabled) {
                 delay(200)
@@ -270,19 +306,25 @@ class GeneralFragment : Fragment() {
                     val offset = lastTwoChars.toInt() * 10
                     val valueToScroll = ((speedKmPerHourInt / 10) * 10).toString()
                     val valueToScrollColor = speedKmPerHourInt.toString()
-                    //   Log.d("valueToScroll", "$valueToScrollColor")
                     scrollToValueWithCenteringSpeed(valueToScroll, valueToScrollColor, (offset * 2))
-                 //   Log.d("DEGREE", "$degreeX")
-                    binding.groundSky.setXX(degreeX)
-                    binding.groundSky.setYY(degreeY)
 
+                }
+            }
+        }
+        groundSkyJob = lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                delay(20)
+                withContext(Dispatchers.Main) {
+                    binding.groundSky.roll(degreeRole)
+                    binding.groundSky.pitch(degreePitch)
+                    binding.ballView.roll(degreeBall)
                 }
             }
         }
 
     }
 
-    fun scrollToValueWithCenteringSpeed(
+    private fun scrollToValueWithCenteringSpeed(
         valueToScrollSpeed: String,
         valueToScrollColor: String,
         offset: Int
@@ -305,17 +347,13 @@ class GeneralFragment : Fragment() {
         }
     }
 
-    fun scrollToValueWithCentering2(valueToScroll: String, offset: Int) {
+    private fun scrollToValueWithCentering2(valueToScroll: String, offset: Int) {
         val layoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
-
         // Находим позицию элемента с заданным значением в altituds
         val positionToScroll = altituds.indexOfFirst { it.altitude == valueToScroll }
-
         if (positionToScroll != -1) {
             // Вычисляем смещение, чтобы элемент был посередине экрана
-
             val targetOffset = 300
-
             // Прокручиваем RecyclerView к заданной позиции с учетом смещения
             layoutManager.scrollToPositionWithOffset(positionToScroll, targetOffset - offset)
         }
@@ -341,16 +379,20 @@ class GeneralFragment : Fragment() {
             MIN_DISTANCE_CHANGE_FOR_UPDATES,
             locationListener
         )
-        val sensorManager2 =
+    }
+    private fun registerSensorSmoothingListener2() {
+        sensorManager2 =
             requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val accelerometer = sensorManager2.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val gyroscope = sensorManager2.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-        val accelGiroListener = object : SensorEventListener {
+        val magnetic2 = sensorManager2.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        accelGiroListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
+
                 when (event?.sensor?.type) {
                     Sensor.TYPE_ACCELEROMETER -> acsel = event.values.clone()
-                    Sensor.TYPE_GYROSCOPE -> giro = event.values.clone()
+                    Sensor.TYPE_MAGNETIC_FIELD -> giro = event.values.clone()
                 }
+
 
                 SensorManager.getRotationMatrix(gravity, magnetic, acsel, giro)
                 var outGravity = FloatArray(9)
@@ -361,19 +403,9 @@ class GeneralFragment : Fragment() {
                     outGravity
                 )
                 SensorManager.getOrientation(outGravity, valuesOrientation)
-                degreeX = valuesOrientation[2] * 57.2958f
-                Log.d("DEGREE_X", "$degreeX")
-                SensorManager.remapCoordinateSystem(
-                    gravity,
-                    SensorManager.AXIS_Y,
-                    SensorManager.AXIS_Z,
-                    outGravity
-                )
-                SensorManager.getOrientation(outGravity, valuesOrientation)
-                degreeY = ((valuesOrientation[2] * 57.2958f) / 100) * 4f
-              //  Log.d("DEGREE_Y", "${valuesOrientation[2] * 57.2958f}")
-             //   Log.d("DEGREE_X", "$degreeX")
-//                binding.groundSky.setXX(degree)
+            //    Log.d("TYPE_ACCELEROMETER", "${valuesOrientation[1]}")
+                degreeXY(valuesOrientation)
+
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -384,13 +416,34 @@ class GeneralFragment : Fragment() {
         sensorManager2.registerListener(
             accelGiroListener,
             accelerometer,
-            SensorManager.SENSOR_DELAY_NORMAL
+            SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager2.registerListener(
             accelGiroListener,
-            gyroscope,
+            magnetic2,
             SensorManager.SENSOR_DELAY_NORMAL
         )
+    }
+    private fun degreeXY(deg: FloatArray) {
+        buferRole[bufferIndex] = deg[2] * 57.2957f
+       // buferPitch[bufferIndex] = ((deg[1] * 57.2957f) / 100f) * 4f
+        // Переход к следующему индексу в буфере
+        bufferIndex = (bufferIndex + 1) % bufferSize
+        // Вычисление среднего значение из буфера
+        val smoothedRole = buferRole.average()
+       // val smoothedPitch = buferPitch.average()
+        degreeBall = smoothedRole.toFloat()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerSensorSmoothingListener2()
+    }
+
+    override fun onPause() {
+        super.onPause()
+       // sensorManager2.unregisterListener(accelGiroListener)
     }
 
     private val locationListener: LocationListener = object : LocationListener {
@@ -403,7 +456,6 @@ class GeneralFragment : Fragment() {
             val speedMetersPerSec = location.speed
             // Преобразование скорости в км/ч
             speedKmPerHour = speedMetersPerSec * 3.6f
-            // Используйте speedKmPerHour для дальнейших действий
         }
 
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -414,13 +466,15 @@ class GeneralFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         gpsJob?.cancel()
+        groundSkyJob?.cancel()
+        verticalSpeedJob?.cancel()
+        sensorManager2.unregisterListener(accelGiroListener)
     }
-
 
     companion object {
         fun newInstance() = GeneralFragment()
         private const val REQUEST_CODE = 1
-        private const val MIN_TIME_BETWEEN_UPDATES: Long = 100 // 0.1 секунда
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 0.1f // 10 метров
+        private const val MIN_TIME_BETWEEN_UPDATES: Long = 100
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 0.1f
     }
 }

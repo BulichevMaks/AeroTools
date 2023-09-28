@@ -14,6 +14,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -61,8 +62,14 @@ class VarioFragment : Fragment() {
         (arduinoRepositoryImpl as ArduinoClientImpl).counLiveData.observe(viewLifecycleOwner) { data ->
             requireActivity().runOnUiThread {
                 if (data.altitude.isNotEmpty()) {
-                    alt = data.altitude
-                    var formattedString = data.altitude.substring(0, data.altitude.length - 1)
+                   // alt = data.altitude
+                   alt = try {
+                        data.altitude.toInt().toString()
+                    } catch (_: NumberFormatException) {
+                        Log.d("ERROR___", "${data.altitude}")
+                        alt
+                    }
+                    var formattedString = alt.substring(0, alt.length - 1)
                     if (formattedString.isEmpty() || formattedString == "-") {
                         formattedString = "0"
                     }
@@ -119,8 +126,6 @@ class VarioFragment : Fragment() {
             val newPressure = binding.editPressureView.text.toString()
             if (newPressure != "") {
                 if (arduinoRepositoryImpl.isSerialConnectionOpen()) {
-
-
                     arduinoRepositoryImpl.setNewPressure("set$newPressure")
                 }
                 binding.currentPressure.text =
@@ -142,12 +147,20 @@ class VarioFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(3000)
                 var verticalSpeed = 0.0
-                var firstAlt = alt.toInt()
+                var firstAlt = try {
+                    alt.toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                }
                 var prevTimestamp = System.currentTimeMillis()
                 while (arduinoRepositoryImpl.isSerialConnectionOpen()) {
 
                     delay(1000)
-                    val secondAlt = alt.toInt()
+                    val secondAlt = try {
+                        alt.toInt()
+                    } catch (_: NumberFormatException) {
+                        0
+                    }
                     val currentTimestamp = System.currentTimeMillis()
 
                     val altitudeChangePerSecond = (secondAlt - firstAlt)
