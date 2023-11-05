@@ -59,20 +59,18 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                     if (bytesRead > 0) {
                         val rawData = String(buffer, 0, bytesRead, Charset.defaultCharset())
 
-                        receiveBuffer.append(rawData) // Добавляем данные в буфер
+                        receiveBuffer.append(rawData)
 
-                        if (receiveBuffer.contains(">")) { // Проверяем наличие разделителя
+                        if (receiveBuffer.contains(">")) {
                             val endIndex = receiveBuffer.indexOf(">")
                             val fullData = receiveBuffer.substring(
                                 0,
                                 endIndex
-                            ) // Получаем полные данные до разделителя
-                           // Log.d("MY_LOG", "Received data: $fullData")
+                            )
                             receiveBuffer.delete(
                                 0,
                                 endIndex + 1
-                            ) // Удаляем полные данные и разделитель из буфера
-                            //  Log.d("MY_LOG", "Received data: $fullData")
+                            )
                             scope.launch {
                                 _counLiveData.postValue(
                                     AttitudeDataSourse(
@@ -80,22 +78,22 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                         pressure = fullData,
                                         roll = "",
                                         pitch = "",
+                                        airspeed = ""
                                     )
                                 )
                             }
                         }
 
-                        if (receiveBuffer.contains("_")) { // Проверяем наличие разделителя
+                        if (receiveBuffer.contains("_")) {
                             val endIndex = receiveBuffer.indexOf("_")
                             val fullData = receiveBuffer.substring(
                                 0,
                                 endIndex
-                            ) // Получаем полные данные до разделителя
+                            )
                             receiveBuffer.delete(
                                 0,
                                 endIndex + 1
-                            ) // Удаляем полные данные и разделитель из буфера
-                            //  Log.d("MY_LOG", "Received data: $fullData")
+                            )
                             scope.launch {
                                 _counLiveData.postValue(
                                     AttitudeDataSourse(
@@ -103,6 +101,7 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                         pressure = "",
                                         roll = "",
                                         pitch = "",
+                                        airspeed = ""
                                     )
                                 )
                             }
@@ -115,12 +114,12 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
 
                             val values = fullData.split(",")
 
-                            if (values.size >= 3) {
-                                val roll = values[1].toDoubleOrNull()
+                            if (values.size >= 4) {
+                                val roll = values[3].toDoubleOrNull()
                                 val pitch = values[2].toDoubleOrNull()
+                                val airspeed = values[1]
 
                                 if (roll != null && pitch != null) {
-                                  //  Log.d("MY_LOG", "Received data - Roll: $roll, Pitch: $pitch")
                                     scope.launch {
                                         _counLiveData.postValue(
                                             AttitudeDataSourse(
@@ -128,6 +127,7 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                                 pressure = "",
                                                 roll = roll.toString(),
                                                 pitch = pitch.toString(),
+                                                airspeed = airspeed
                                             )
                                         )
                                     }
@@ -136,7 +136,6 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                         }
                     }
                 } catch (e: IOException) {
-                    Log.d("MY_LOG", "The device is disabled")
                     MaterialAlertDialogBuilder(context)
                         .setMessage("PORT NOT OPEN")
                         .setNeutralButton(
@@ -145,7 +144,6 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
 
                         }.show()
                     e.printStackTrace()
-                    // return
                 }
             }
         }
@@ -153,27 +151,11 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            //   Log.d("MY_LOG", "onReceive")
             if (intent.action == ACTION_USB_PERMISSION) {
                 val granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, true)
                 if (granted) {
                     connection = usbManager.openDevice(device)
-                    if (connection == null) {
 
-                        //          Log.d("MY_LOG", "устройство не удалось открыть")
-                        mainHandler.post {
-                            Toast.makeText(context, "устройство не удалось открыть", Toast.LENGTH_LONG).show()
-                        }
-
-
-                    } else {
-
-                        //     Log.d("MY_LOG", "удалось открыть устройство")
-//                        mainHandler.post {
-//                            Toast.makeText(context, "удалось открыть устройство", Toast.LENGTH_LONG).show()
-//                        }
-
-                    }
                     val driver = UsbSerialProber.getDefaultProber().probeDevice(device)
                     if (driver != null) {
                         serialPort = driver.ports[0]
@@ -190,19 +172,16 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                                 mCallback.run()
                             }
                         } catch (e: Exception) {
-                            //           Log.d("MY_LOG", "PORT NOT OPEN")
                             mainHandler.post {
                                 Toast.makeText(context, "PORT NOT OPEN", Toast.LENGTH_LONG).show()
                             }
                         }
                     } else {
-                        //       Log.d("MY_LOG", "Driver not found")
                         mainHandler.post {
                             Toast.makeText(context, "Driver not found", Toast.LENGTH_LONG).show()
                         }
                     }
                 } else {
-                    //      Log.d("MY_LOG", "PERM NOT GRANTED")
                     mainHandler.post {
                         Toast.makeText(context, "PERM NOT GRANTED", Toast.LENGTH_LONG).show()
                     }
@@ -213,7 +192,6 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
             } else if (intent.action == UsbManager.ACTION_USB_DEVICE_DETACHED) {
                 // Действия при отключении USB-устройства
                 closeConnection()
-                Log.d("MY_LOG", "The device is disabled")
                 mainHandler.post {
                     Toast.makeText(context, "The device is disabled", Toast.LENGTH_LONG).show()
                 }
@@ -231,11 +209,9 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
 
     fun startAltFlow() {
         onClickStart()
-      //  Log.d("MY_LOG1", "${counLiveData.value}")
     }
 
     fun setNewPressure(p: String) {
-      //  Log.d("MY_LOG", "Received data: $p")
         serialPort.write(p.toByteArray(), 2000) //
     }
 
@@ -275,7 +251,6 @@ class ArduinoClientImpl(private val mainHandler: Handler, private val context: C
                     keep = false
                 } else {
                     connection = usbManager.openDevice(device) ?: error("Device connection is null")
-                    //     Log.d("MY_LOG", "Device connection is null")
                 }
                 if (!keep) break
             }

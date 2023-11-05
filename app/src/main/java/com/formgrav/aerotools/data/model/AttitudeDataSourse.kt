@@ -7,6 +7,7 @@ data class AttitudeDataSourse(
     val pressure: String,
     val roll: String,
     val pitch: String,
+    val airspeed: String,
 )
 fun AttitudeDataSourse.toDomainModel() = AttitudeData(altitude, pressure, roll, pitch)
 
