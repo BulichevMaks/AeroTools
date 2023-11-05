@@ -175,7 +175,6 @@ class GeneralFragment : Fragment() {
         (arduinoRepositoryImpl as ArduinoClientImpl).counLiveData.observe(viewLifecycleOwner) { data ->
             requireActivity().runOnUiThread {
                 if (data.altitude.isNotEmpty()) {
-                 //  alt = data.altitude
                     alt = try {
                         data.altitude.toInt()
                         data.altitude
@@ -238,7 +237,7 @@ class GeneralFragment : Fragment() {
             verticalSpeedJob = lifecycleScope.launch(Dispatchers.IO) {
                 delay(3000)
                 var verticalSpeed = 0.0
-               // var firstAlt = alt.toInt()
+
                 var firstAlt = try {
                     alt.toInt()
                 } catch (_: NumberFormatException) {
@@ -248,7 +247,6 @@ class GeneralFragment : Fragment() {
                 while (arduinoRepositoryImpl.isSerialConnectionOpen()) {
 
                     delay(1000)
-                  //  val secondAlt = alt.toInt()
                     val secondAlt = try {
                         alt.toInt()
                     } catch (_: NumberFormatException) {
@@ -409,7 +407,7 @@ class GeneralFragment : Fragment() {
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                // Обработка изменения точности
+
             }
         }
 
@@ -439,6 +437,9 @@ class GeneralFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         registerSensorSmoothingListener2()
+        gpsJob?.start()
+        groundSkyJob?.start()
+        verticalSpeedJob?.start()
     }
 
     override fun onPause() {

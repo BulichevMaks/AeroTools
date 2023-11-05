@@ -154,6 +154,6 @@ class MapFragment : Fragment() {
 
         private const val REQUEST_CODE = 1
         private const val MIN_TIME_BETWEEN_UPDATES: Long = 100 // 0.1 секунда
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 0.1f // 10 метров
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 0.1f // 1 метров
     }
 }

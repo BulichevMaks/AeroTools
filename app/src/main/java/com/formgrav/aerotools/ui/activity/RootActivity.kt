@@ -2,6 +2,7 @@ package com.formgrav.aerotools.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.navigation.fragment.NavHostFragment
 
 import com.formgrav.aerotools.R
@@ -20,6 +21,8 @@ class RootActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val navHostFragment1 = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView1) as NavHostFragment
         val navController = navHostFragment1.navController

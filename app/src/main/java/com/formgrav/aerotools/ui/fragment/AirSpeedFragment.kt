@@ -2,19 +2,22 @@ package com.formgrav.aerotools.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.formgrav.aerotools.data.datasourse.ArduinoClientImpl
 import com.formgrav.aerotools.databinding.FragmentSpeedBinding
 import com.formgrav.aerotools.domain.model.Settings
 import com.formgrav.aerotools.ui.viewmodel.AirSpeedViewModel
+import kotlin.math.sqrt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -22,6 +25,7 @@ class AirSpeedFragment : Fragment() {
 
     private val vm: AirSpeedViewModel by viewModel()
     private lateinit var binding: FragmentSpeedBinding
+    private lateinit var arduinoRepositoryImpl: ArduinoClientImpl
     private var startGrayAngle = 40
     private var sweepGrayAngle = 20
     private var startGreenAngle = 60
@@ -32,9 +36,8 @@ class AirSpeedFragment : Fragment() {
     private var sweepRedAngle = 40
     private var startRedAngle2 = 120
     private var sweepRedAngle2 = 40
-    var speedKmPerHour: Float = 0.0F
-    var gpsJob: Job? = null
-
+    var speedKmPerHour: String = "0"
+    var airspeedJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +99,25 @@ class AirSpeedFragment : Fragment() {
                 binding.speedView.setStartGreenAngle(startGreenAngle)
                 binding.speedView.setSweepGreenAngle(sweepGreenAngle)
 
+            }
+        }
+        arduinoRepositoryImpl = getKoin().get<ArduinoClientImpl>()
+        (arduinoRepositoryImpl as ArduinoClientImpl).counLiveData.observe(viewLifecycleOwner) { data ->
+            requireActivity().runOnUiThread {
+                if (data.airspeed.isNotEmpty() && data.airspeed != "nan") {
+                    speedKmPerHour = data.airspeed
+                }
+            }
+        }
+        airspeedJob = lifecycleScope.launch(Dispatchers.IO) {
+            while (true) {
+                delay(200)
+                withContext(Dispatchers.Main) {
+                    val number = speedKmPerHour.replace(',', '.').toDouble().toInt()
+                    binding.airspeed.text = number.toString()
+                    binding.speedView.setArrowRotationAnimated(number)
+
+                }
             }
         }
     }
@@ -166,6 +188,11 @@ class AirSpeedFragment : Fragment() {
                 sweepRedAngle2,
             ))
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        airspeedJob?.cancel()
     }
 
     companion object {
